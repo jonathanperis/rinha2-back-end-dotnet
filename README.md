@@ -1,64 +1,69 @@
-﻿# Rinha de Backend - Segunda Edição
+# rinha2-back-end-dotnet
 
-Versão C# da [rinha de backend 2ª edição - 2024/Q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1). 
+High-performance backend implementation for the **Rinha de Backend** challenge (2nd Edition, 2024/Q1) — built with **ASP.NET 9**, **PostgreSQL**, and **Nginx**.
 
-## Stack
+**Live results:** [jonathanperis.github.io/rinha2-back-end-dotnet](https://jonathanperis.github.io/rinha2-back-end-dotnet/)
 
-- aspnet 8.0
-- nginx
-- postgresql
+---
 
-## Otimizações
+## About
 
-- [AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot)
-- [Trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?pivots=dotnet-8-0#trimming-framework-library-features)
+A C#/.NET implementation of the Brazilian backend programming challenge that pushes API performance to the limit under strict resource constraints. The API manages fictional bank clients with credit/debit transactions and balance statements.
 
-## Rodando o projeto
+### Endpoints
+
+- `POST /clientes/{id}/transacoes` — Create a transaction (credit or debit)
+- `GET /clientes/{id}/extrato` — Get client balance and recent transactions
+
+### Results
+
+All requests completed under 800ms using only **250MB of RAM** — 60% less than the challenge allows.
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| ASP.NET 9.0 | Minimal API with Native AOT compilation |
+| PostgreSQL | Database with stored procedures and UNLOGGED tables |
+| Nginx | Reverse proxy / load balancer (least-conn) |
+| Docker | Multi-stage build and orchestration |
+| Npgsql 9.0 | PostgreSQL driver with connection pooling |
+| OpenTelemetry | Tracing, metrics, and logging |
+| Grafana + InfluxDB | Observability and load test metrics |
+| k6 | Stress testing |
+
+## Architecture
+
+- **2 API instances** behind Nginx (0.4 CPU, 100MB RAM each)
+- **1 PostgreSQL** database (0.5 CPU, 330MB RAM)
+- **1 Nginx** load balancer (0.2 CPU, 20MB RAM)
+- Business logic pushed into PostgreSQL stored functions
+- Native AOT compilation for minimal startup time and memory footprint
+- System.Text.Json source generators for zero-reflection serialization
+
+## Performance Optimizations
+
+- Native AOT (ahead-of-time compilation)
+- Trimming and extra optimization flags
+- PostgreSQL tuned: `synchronous_commit=0`, `fsync=0`, UNLOGGED tables
+- Connection pooling with multiplexing via Npgsql
+- Conditional compilation to strip telemetry in production builds
+
+## Getting Started
 
 ```bash
 docker compose up nginx -d --build
 ```
 
-## Resultados
+The API will be available at `http://localhost:9999`.
 
-### Resultado do Gatling local
+## Other Implementations
 
-Todas requisições abaixo de 800ms. (Estes testes utilizaram um máximo de 250MB RAM distribuidos entre os recursos. 60% menos recurso de memória RAM do que o permitido pela rinha!
+- [rinha2-back-end-go](https://github.com/jonathanperis/rinha2-back-end-go) — Go
+- [rinha2-back-end-rust](https://github.com/jonathanperis/rinha2-back-end-rust) — Rust
+- [rinha2-back-end-python](https://github.com/jonathanperis/rinha2-back-end-python) — Python
+- [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) — k6 stress tests
 
-![Gatling](docs/screenshots/gatling-1.png)
+## License
 
-![Gatling](docs/screenshots/gatling-2.png)
-
-## Métricas dos testes
-
-Métricas colhidas no Docker Desktop após a execução do teste. O teste foi executado em um Mac Mini M1 16GB RAM/512GB SSD.
-
-- Banco de dados (Postgresql)
-
-![Banco de dados](docs/screenshots/metrica-banco-de-dados.png)
-
-- Endpoints (.NET)
-
-![Endpoint 1 da API](docs/screenshots/metrica-api-endpoint-1.png)
-
-![Endpoint 1 da API](docs/screenshots/metrica-api-endpoint-2.png)
-
-- Proxy reverso (Nginx)
-
-![Proxy reverso](docs/screenshots/metrica-proxy-reverso.png)
-
-## Versões alternativas
-
-### Implementações que elaborei em outras linguagens
-
-- [rinha2-back-end-go](https://github.com/jonathanperis/rinha2-back-end-go)
-- [rinha2-back-end-rust](https://github.com/jonathanperis/rinha2-back-end-rust)
-- [rinha2-back-end-python](https://github.com/jonathanperis/rinha2-back-end-python)
-- [rinha2-back-end-postgrest](https://github.com/jonathanperis/rinha2-back-end-postgrest)
-
-Este repositorio foi desenvolvido utilizando de minha experiencia profissional e inspirado nos seguintes colegas da rinha:
-
-- [rafaelpadovezi/rinha-2](https://github.com/rafaelpadovezi/rinha-2)
-- [giggio/rinhaback2401-01](https://github.com/giggio/rinhaback2401-01)
-- [zanfranceschi/rinha-de-backend-2024-q1-zan-dotnet](https://github.com/zanfranceschi/rinha-de-backend-2024-q1-zan-dotnet)
-- [offpepe/rinha-2024-q1](https://github.com/offpepe/rinha-2024-q1)
+Licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
