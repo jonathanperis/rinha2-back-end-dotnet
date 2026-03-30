@@ -45,7 +45,7 @@ All requests completed under 800ms using only **250MB of RAM** — 60% less than
 
 - Native AOT (ahead-of-time compilation)
 - Trimming and extra optimization flags
-- PostgreSQL tuned: `synchronous_commit=0`, `fsync=0`, UNLOGGED tables
+- PstgreSQL tuned: `synchronous_commit=0`, `fsync=0`, UNLOGGED tables
 - Connection pooling with multiplexing via Npgsql
 - Conditional compilation to strip telemetry in production builds
 
