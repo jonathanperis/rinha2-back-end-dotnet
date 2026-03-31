@@ -540,4 +540,14 @@ section + section {
   .report-date {
     display: none;
   }
+  .impl-grid { grid-template-columns: 1fr; }
 }
+
+/* === Implementations Grid === */
+.impl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1.25rem; }
+.impl-card { display: flex; align-items: center; gap: 0.75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; transition: border-color 0.2s, background 0.2s; color: var(--text); }
+.impl-card:hover { border-color: var(--border-hover); background: var(--bg-card-hover); color: var(--text); }
+.impl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.impl-name { font-size: 0.875rem; font-weight: 500; }
+.impl-badge { font-family: var(--mono); font-size: 0.625rem; font-weight: 600; color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.3); padding: 0.15rem 0.4rem; border-radius: 4px; margin-left: auto; }
+.impl-badge-learning { font-family: var(--mono); font-size: 0.625rem; font-weight: 600; color: #60a5fa; background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); padding: 0.15rem 0.4rem; border-radius: 4px; margin-left: auto; }

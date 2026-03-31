@@ -57,12 +57,15 @@ docker compose up nginx -d --build
 
 The API will be available at `http://localhost:9999`.
 
+## Stress Tests
+
+- [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) — Grafana k6 stress test suite used across all implementations
+
 ## Other Implementations
 
-- [rinha2-back-end-go](https://github.com/jonathanperis/rinha2-back-end-go) — Go
-- [rinha2-back-end-rust](https://github.com/jonathanperis/rinha2-back-end-rust) — Rust
-- [rinha2-back-end-python](https://github.com/jonathanperis/rinha2-back-end-python) — Python
-- [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) — k6 stress tests
+- [rinha2-back-end-go](https://github.com/jonathanperis/rinha2-back-end-go) — Go ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
+- [rinha2-back-end-rust](https://github.com/jonathanperis/rinha2-back-end-rust) — Rust ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
+- [rinha2-back-end-python](https://github.com/jonathanperis/rinha2-back-end-python) — Python ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
 
 ## License
 
