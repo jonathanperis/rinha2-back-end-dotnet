@@ -3,7 +3,7 @@ name: 'rinha2-back-end-dotnet'
 services:
 
   webapi1-dotnet: &webapi1
-    image: jonathanperis/rinha2-back-end-dotnet:latest
+    image: ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest
     container_name: webapi-1-dotnet-rinha
     depends_on:
       db:
@@ -66,7 +66,7 @@ services:
           memory: "20MB"
 
   k6:
-    image: jonathanperis/rinha2-back-end-k6:latest
+    image: ghcr.io/jonathanperis/rinha2-back-end-k6:latest
     container_name: k6-rinha
     environment:
       # Set MODE=dev to export data via xk6-influxdb, or MODE=prod to generate an HTML report.
