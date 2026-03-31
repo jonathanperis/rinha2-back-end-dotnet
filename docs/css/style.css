@@ -475,6 +475,15 @@ section + section {
   to { transform: rotate(360deg); }
 }
 
+.older-reports-toggle {
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
 /* === Footer === */
 .site-footer {
   margin-top: auto;
