@@ -1,49 +1,67 @@
-// docs/js/script.js
-// Custom JavaScript for additional functionalities can be added here.
-console.log("Rinha de Backend page loaded.");
+(() => {
+  const container = document.getElementById('reports-container');
+  if (!container) return;
 
-// Load test reports from the reports folder via the GitHub API.
-// Currently, the report links are set to refer to blank pages until real reports are generated.
-const reportsList = document.getElementById('reports-list');
-if (reportsList) {
-  const apiUrl = 'https://api.github.com/repos/jonathanperis/rinha2-back-end-dotnet/contents/docs/reports?ref=main';
-  
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      // Clear loading message
-      reportsList.innerHTML = '';
-      
-      // Filter HTML files (reports)
-      let htmlFiles = data.filter(file => file.name.endsWith('.html'));
-      
-      // Sort files in descending order by name.
-      // Adjust the sorting criteria if your file naming convention is different.
-      htmlFiles.sort((a, b) => b.name.localeCompare(a.name));
-      
-      // Select only the last 5 reports
-      htmlFiles = htmlFiles.slice(0, 5);
-      
-      htmlFiles.forEach(file => {
-        // Generating a public URL for GitHub Pages (docs folder is served as the site)
-        const publicUrl = `https://jonathanperis.github.io/rinha2-back-end-dotnet/reports/${file.name}`;
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = publicUrl;
-        a.textContent = file.name;
-        a.target = "_blank";
-        a.className = "text-accent hover:underline";
-        li.appendChild(a);
-        reportsList.appendChild(li);
-      });
-      
-      // If no HTML files are present, display a message.
-      if (!reportsList.children.length) {
-        reportsList.innerHTML = '<li>No reports found.</li>';
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching reports:', error);
-      reportsList.innerHTML = '<li>Error fetching reports.</li>';
+  const API_URL = 'https://api.github.com/repos/jonathanperis/rinha2-back-end-dotnet/contents/docs/reports?ref=main';
+  const BASE_URL = 'https://jonathanperis.github.io/rinha2-back-end-dotnet/reports/';
+  const MAX_REPORTS = 10;
+
+  function parseDate(filename) {
+    // stress-test-report-YYYYMMDDHHMMSS.html
+    const m = filename.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
+    if (!m) return null;
+    return new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}`);
+  }
+
+  function formatDate(date) {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false
     });
-}
+  }
+
+  function renderReports(files) {
+    let htmlFiles = files
+      .filter(f => f.name.endsWith('.html'))
+      .sort((a, b) => b.name.localeCompare(a.name))
+      .slice(0, MAX_REPORTS);
+
+    if (!htmlFiles.length) {
+      container.innerHTML = '<div class="reports-empty">No reports found.</div>';
+      return;
+    }
+
+    const list = document.createElement('ul');
+    list.className = 'reports-list';
+
+    htmlFiles.forEach((file, i) => {
+      const date = parseDate(file.name);
+      const li = document.createElement('li');
+      li.className = 'report-item';
+      li.innerHTML = `
+        <div class="report-info">
+          <span class="report-icon">${i === 0 ? '&#9679;' : '&#9675;'}</span>
+          <span class="report-name">${file.name.replace('.html', '')}</span>
+        </div>
+        <span class="report-date">${formatDate(date)}</span>
+        <a href="${BASE_URL}${file.name}" target="_blank" rel="noopener" class="report-link">View &rarr;</a>
+      `;
+      list.appendChild(li);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(list);
+  }
+
+  fetch(API_URL)
+    .then(r => {
+      if (!r.ok) throw new Error(`GitHub API: ${r.status}`);
+      return r.json();
+    })
+    .then(renderReports)
+    .catch(err => {
+      console.error('Error fetching reports:', err);
+      container.innerHTML = '<div class="reports-empty">Failed to load reports. Try refreshing.</div>';
+    });
+})();

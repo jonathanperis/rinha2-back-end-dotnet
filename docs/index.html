@@ -3,176 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rinha de Backend (.NET) - Segunda Edição</title>
-  <!-- Link to custom styles -->
+  <title>rinha2-back-end-dotnet | Jonathan Peris</title>
+  <meta name="description" content="High-performance .NET backend for the Rinha de Backend competition. Perfect score. Zero penalties.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Tailwind configuration to extend with GitHub-like colors and fonts.
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            github: "#24292e",
-            "github-light": "#fafbfc",
-            accent: "#0366d6",
-          },
-          fontFamily: {
-            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
 </head>
-<body class="bg-github-light text-gray-900">
-  <div class="flex flex-col min-h-screen">
-    <header class="bg-github shadow">
-      <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-white">Rinha de Backend (.NET)</h1>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="header-logo"><span class="prompt">~</span> rinha2-back-end-dotnet</span>
+        </div>
+        <nav>
+          <ul class="header-nav">
+            <li><a href="#about">About</a></li>
+            <li><a href="#result">Result</a></li>
+            <li><a href="#stack">Stack</a></li>
+            <li><a href="#reports">Reports</a></li>
+          </ul>
+        </nav>
       </div>
-    </header>
-    <main class="container mx-auto px-4 py-8 flex-grow">
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">About the Project</h2>
-        <p class="mb-4">
-          The <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" target="_blank" class="font-mono text-accent hover:underline">rinha2-back-end-dotnet</a> project was developed during the Rinha de Backend competition. It showcases a fusion of modern technologies and robust coding.
-        </p>
-        <p class="mb-4">Technologies used include:</p>
-        <ul class="list-disc list-inside">
-          <li><strong>JavaScript:</strong> Dynamic functionalities and server-side operations.</li>
-          <li><strong>PLpgSQL:</strong> Advanced database procedures ensuring optimal performance.</li>
-          <li><strong>C#:</strong> Performance-critical backend services.</li>
-          <li><strong>Docker:</strong> Containerization for consistent deployments.</li>
-          <li><strong>Shell:</strong> Automation and efficient scripting.</li>
-        </ul>
-      </section>
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Technical Excellence</h2>
-        <p class="mb-4">
-          Built around clean code principles and a modular architecture, the project ensures:
-        </p>
-        <ul class="list-disc list-inside">
-          <li>Scalability and maintainability.</li>
-          <li>Robust error handling and comprehensive logging.</li>
-          <li>Optimized database interactions.</li>
-          <li>Consistent deployments via containerization.</li>
-          <li>Automated routine tasks using shell scripts.</li>
-        </ul>
-      </section>
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">User Experience</h2>
-        <p class="mb-4">
-          With a clean, minimalistic design inspired by GitHub, this page offers a straightforward interface to explore the project's technical strengths.
-        </p>
-      </section>
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Competition Rules</h2>
-        <p class="mb-4">
-          The competition requires you to develop an HTTP API with specific endpoints and behaviors. Here are the key rules:
-        </p>
-        <ul class="list-disc list-inside mb-4">
-          <li>
-            <strong>Transações Endpoint:</strong>
-            <ul class="list-disc list-inside ml-6">
-              <li>HTTP Method: <code>POST /clientes/[id]/transacoes</code></li>
-              <li>
-                Request Body must include:
-                <ul class="list-disc list-inside ml-6">
-                  <li><code>valor</code>: a positive integer in centavos (e.g., R$ 10 = 1000 centavos)</li>
-                  <li><code>tipo</code>: either <code>c</code> (credit) or <code>d</code> (debit)</li>
-                  <li><code>descricao</code>: a string between 1 and 10 characters</li>
-                </ul>
-              </li>
-              <li>
-                Validation rules:
-                <ul class="list-disc list-inside ml-6">
-                  <li>All fields are mandatory.</li>
-                  <li>
-                    A debit transaction must not drop the client’s balance below their limit. Transactions causing an inconsistency must return <code>HTTP 422</code>.
-                  </li>
-                  <li>
-                    Requests with a non-existent client ID must return <code>HTTP 404</code>.
-                  </li>
-                </ul>
-              </li>
-              <li>
-                Response:
-                <ul class="list-disc list-inside ml-6">
-                  <li><code>HTTP 200 OK</code> for successful transactions</li>
-                  <li>Response JSON contains the client's <code>limite</code> and updated <code>saldo</code>.</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <strong>Extrato Endpoint:</strong>
-            <ul class="list-disc list-inside ml-6">
-              <li>HTTP Method: <code>GET /clientes/[id]/extrato</code></li>
-              <li>
-                Response:
-                <ul class="list-disc list-inside ml-6">
-                  <li><code>HTTP 200 OK</code> along with a JSON object containing:
-                    <ul class="list-disc list-inside ml-6">
-                      <li><code>saldo</code> object with <code>total</code>, <code>data_extrato</code>, and <code>limite</code></li>
-                      <li><code>ultimas_transacoes</code>: up to the 10 most recent transactions (including <code>valor</code>, <code>tipo</code>, <code>descricao</code>, and <code>realizada_em</code>[...]
-                    </ul>
-                  </li>
-                  <li>Requests with a non-existent client ID must return <code>HTTP 404</code>.</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <strong>Initial Client Data:</strong>
-            <ul class="list-disc list-inside ml-6">
-              <li>Only five clients exist with the following IDs and limits:</li>
-              <li>ID 1: Limit 100,000</li>
-              <li>ID 2: Limit 80,000</li>
-              <li>ID 3: Limit 1,000,000</li>
-              <li>ID 4: Limit 10,000,000</li>
-              <li>ID 5: Limit 500,000</li>
-              <li>Do <em>not</em> register a client with ID 6.</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Additional Requirements:</strong>
-            <ul class="list-disc list-inside ml-6">
-              <li>Containerize your API using a <code>docker-compose.yml</code> file that respects the provided CPU and memory restrictions.</li>
-              <li>Ensure all services are publicly available; otherwise, tests will not be executed.</li>
-              <li>The source repository for your API must be publicly accessible and mentioned in your submission README.</li>
-            </ul>
-          </li>
-        </ul>
-        <p class="italic">
-          For full details, please refer to the official competition README available 
-          <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1/blob/main/README.md" target="_blank" class="text-accent hover:underline">here</a>.
-        </p>
-      </section>
-      <!-- New Load Test Reports Section -->
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Load Test Reports</h2>
-        <p class="mb-4">
-          Below is a list of load test reports generated via <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release-webapi.yml" target="_blank" class="text-accent hover:underline">Github Actions</a>. These reports are hosted publicly via GitHub Pages.
-        </p>
-        <p class="mb-4">
-          Note: Previously, the load script for this project was developed for the Gatling load test framework using Scala. It has now been migrated to Grafana K6 using JavaScript to better integrate with our CI/CD environment since Grafana K6 supports CLI natively.
-        </p>        
-        <ul id="reports-list" class="list-disc pl-5 space-y-2">
-          <li>Loading reports...</li>
-        </ul>
-      </section>
-    </main>
-    <footer class="bg-gray-200 shadow mt-auto">
-      <div class="container mx-auto px-4 py-4 text-center">
-        <p>
-          Made with ❤️ by Jonathan Peris | <a href="https://jonathanperis.github.io/" target="_blank" class="text-accent hover:underline">Peris Studio</a>
-        </p>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Perfect Score &mdash; USD 100,000.00
       </div>
-    </footer>
-  </div>
-  <!-- Link to custom scripts -->
+      <h1>Rinha de Backend<br><span class="highlight">.NET Implementation</span></h1>
+      <p class="hero-desc">
+        A high-performance ASP.NET backend built for the
+        <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1" target="_blank" rel="noopener">Rinha de Backend</a>
+        competition (2nd edition) &mdash; a Brazilian developer challenge to build the most performant HTTP API across any language or framework.
+      </p>
+      <div class="hero-links">
+        <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Source Code
+        </a>
+        <a href="#reports" class="btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.5 1.75a.75.75 0 00-1.5 0v12.5c0 .414.336.75.75.75h14.5a.75.75 0 000-1.5H1.5V1.75zm14.28 2.53a.75.75 0 00-1.06-1.06L10 7.94 7.53 5.47a.75.75 0 00-1.06 0L3.22 8.72a.75.75 0 001.06 1.06L7 7.06l2.47 2.47a.75.75 0 001.06 0l5.25-5.25z"/></svg>
+          Stress Tests
+        </a>
+        <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1/blob/main/RESULTADOS.md" target="_blank" rel="noopener" class="btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>
+          Official Results
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">// about</p>
+      <h2 class="section-title">The Competition</h2>
+      <p class="section-text">
+        The <strong>Rinha de Backend - Segunda Edicao</strong> was a performance competition where developers built HTTP APIs
+        handling financial transactions (credits/debits) under strict resource constraints. The APIs had to manage concurrent
+        load while maintaining data consistency &mdash; all within tight CPU and memory limits enforced via Docker.
+      </p>
+      <p class="section-text">
+        Two endpoints were required: <code>POST /clientes/{id}/transacoes</code> for processing transactions and
+        <code>GET /clientes/{id}/extrato</code> for account statements. The evaluation criteria were brutal:
+        98% of responses under 250ms and zero balance inconsistencies.
+      </p>
+
+      <!-- Architecture -->
+      <div class="arch-block">
+        <span class="comment">// infrastructure</span><br>
+        <span class="keyword">nginx</span> <span class="string">:9999</span> &rarr; load balancer (round-robin)<br>
+        &nbsp;&nbsp;<span class="keyword">api-01</span> <span class="string">:8080</span> &rarr; ASP.NET 9.0 (native AOT)<br>
+        &nbsp;&nbsp;<span class="keyword">api-02</span> <span class="string">:8080</span> &rarr; ASP.NET 9.0 (native AOT)<br>
+        <span class="keyword">postgres</span> <span class="string">:5432</span> &rarr; database (PLpgSQL stored procedures)<br>
+        <br>
+        <span class="comment">// constraints</span><br>
+        total: <span class="string">1.5 vCPU</span> + <span class="string">550MB RAM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="result">
+    <div class="container">
+      <p class="section-label">// competition result</p>
+      <h2 class="section-title">Perfect Score</h2>
+      <p class="section-text">
+        Zero penalties across both evaluation criteria. The API handled the full Gatling stress test
+        with 100% of responses under the SLA threshold and complete balance consistency throughout.
+      </p>
+      <div class="result-card">
+        <div class="result-header">
+          <span class="result-icon">&#127942;</span>
+          <span class="result-title">jonathanperis &mdash; rinha2-back-end-dotnet</span>
+        </div>
+        <div class="result-grid">
+          <div class="result-stat">
+            <div class="result-stat-label">SLA Penalty (&gt;249ms)</div>
+            <div class="result-stat-value perfect">USD 0.00</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Consistency Penalty</div>
+            <div class="result-stat-value perfect">USD 0.00</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Total Penalty</div>
+            <div class="result-stat-value perfect">USD 0.00</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-label">Final Score</div>
+            <div class="result-stat-value gold">USD 100,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section id="stack">
+    <div class="container">
+      <p class="section-label">// tech stack</p>
+      <h2 class="section-title">Built With</h2>
+      <div class="stack-grid">
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #512BD4"></span>
+          <div>
+            <div class="stack-name">C# / ASP.NET 9.0</div>
+            <div class="stack-desc">Native AOT, Slim Builder</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #336791"></span>
+          <div>
+            <div class="stack-name">PostgreSQL</div>
+            <div class="stack-desc">PLpgSQL stored procedures</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #009639"></span>
+          <div>
+            <div class="stack-name">Nginx</div>
+            <div class="stack-desc">Reverse proxy, load balancer</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #2496ED"></span>
+          <div>
+            <div class="stack-name">Docker</div>
+            <div class="stack-desc">Multi-arch containerization</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #7D64FF"></span>
+          <div>
+            <div class="stack-name">Grafana K6</div>
+            <div class="stack-desc">Load testing, HTML reports</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #F46800"></span>
+          <div>
+            <div class="stack-name">Prometheus + Grafana</div>
+            <div class="stack-desc">Metrics & monitoring</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #2088FF"></span>
+          <div>
+            <div class="stack-name">GitHub Actions</div>
+            <div class="stack-desc">CI/CD pipeline</div>
+          </div>
+        </div>
+        <div class="stack-item">
+          <span class="stack-dot" style="background: #E535AB"></span>
+          <div>
+            <div class="stack-name">OpenTelemetry</div>
+            <div class="stack-desc">Distributed tracing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reports -->
+  <section id="reports">
+    <div class="container">
+      <p class="section-label">// stress tests</p>
+      <h2 class="section-title">K6 Load Test Reports</h2>
+      <p class="section-text">
+        Reports generated automatically via
+        <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release-webapi.yml" target="_blank" rel="noopener">GitHub Actions</a>
+        on every push to <code>main</code>. Previously built on Gatling/Scala, now migrated to Grafana K6 for native CI/CD integration.
+      </p>
+      <div id="reports-container">
+        <div class="reports-loading">
+          <span class="spinner"></span> Loading reports...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-text">Built by <a href="https://jonathanperis.github.io/" target="_blank" rel="noopener">Jonathan Peris</a></span>
+        <div class="footer-links">
+          <a href="https://github.com/jonathanperis" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1" target="_blank" rel="noopener">Competition</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script src="js/script.js"></script>
 </body>
 </html>
