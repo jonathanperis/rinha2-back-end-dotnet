@@ -14,7 +14,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Clone wiki
         run: git clone https://github.com/${{ github.repository }}.wiki.git wiki/ || echo "Wiki not found, skipping"
