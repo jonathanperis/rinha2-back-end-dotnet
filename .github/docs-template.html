@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>rinha2-back-end-dotnet - Documentation</title>
-  <meta name="description" content=".NET 9 implementation of Rinha de Backend 2024/Q1 — fictional bank API built for performance under constraints">
+  <title>{{TITLE}} - Documentation</title>
+  <meta name="description" content="{{DESCRIPTION}}">
   <style>
     :root {
       --bg: #0a0a0a;
@@ -384,7 +384,7 @@
       <span></span>
       <span></span>
     </button>
-    <div class="repo-title">rinha2-back-end-dotnet</div>
+    <div class="repo-title">{{TITLE}}</div>
   </div>
 
   <div class="overlay" id="overlay"></div>
@@ -392,22 +392,15 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h1 class="repo-title">rinha2-back-end-dotnet</h1>
-      <p class="repo-description">.NET 9 implementation of Rinha de Backend 2024/Q1 — fictional bank API built for performance under constraints</p>
+      <h1 class="repo-title">{{TITLE}}</h1>
+      <p class="repo-description">{{DESCRIPTION}}</p>
       <input type="text" id="searchInput" class="search-box" placeholder="Search documentation...">
     </div>
     <div class="sidebar-nav-container">
-      <ul>
-  <li><a href="#home" class="nav-item">Home</a></li>
-  <li><a href="#architecture" class="nav-item">Architecture</a></li>
-  <li><a href="#challenge" class="nav-item">Challenge</a></li>
-  <li><a href="#ci-cd-pipeline" class="nav-item">CI CD Pipeline</a></li>
-  <li><a href="#getting-started" class="nav-item">Getting Started</a></li>
-  <li><a href="#performance" class="nav-item">Performance</a></li>
-</ul>
+      {{SIDEBAR_NAV}}
     </div>
     <div class="sidebar-footer">
-      <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+      <a href="{{GITHUB_URL}}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
       <div>Built by Jonathan Peris</div>
     </div>
   </aside>
@@ -415,268 +408,7 @@
   <!-- Main Content -->
   <div class="content-wrapper">
     <main class="content" id="mainContent">
-      
-<section id="home" class="doc-section">
-  <h1 class="page-title">Home</h1>
-  <h1>rinha2-back-end-dotnet</h1>
-<p>C#/.NET 9 Native AOT implementation for the Rinha de Backend 2024/Q1 challenge. Manages a fictional bank API with transaction processing and balance statements under strict resource constraints (1.5 CPU, 550MB RAM total across all containers).</p>
-<h2>Wiki Pages</h2>
-<table>
-<thead>
-<tr>
-<th>Page</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="Challenge">Challenge</a></td>
-<td>What is Rinha de Backend 2024/Q1</td>
-</tr>
-<tr>
-<td><a href="Architecture">Architecture</a></td>
-<td>Stack, services, resource constraints</td>
-</tr>
-<tr>
-<td><a href="Getting-Started">Getting Started</a></td>
-<td>Prerequisites and how to run</td>
-</tr>
-<tr>
-<td><a href="Performance">Performance</a></td>
-<td>Results, benchmarks, resource usage</td>
-</tr>
-<tr>
-<td><a href="CI-CD-Pipeline">CI/CD Pipeline</a></td>
-<td>GitHub Actions workflows</td>
-</tr>
-</tbody></table>
-<h2>Key Features</h2>
-<ul>
-<li>.NET 9 with Native AOT compilation for zero-JIT startup</li>
-<li>System.Text.Json source generators for reflection-free serialization</li>
-<li>Npgsql 9.0 with connection pooling and multiplexing</li>
-<li>PostgreSQL stored procedures for server-side business logic</li>
-<li>All requests under 800ms at 250MB RAM usage</li>
-<li>Perfect Score badge achieved</li>
-</ul>
-<hr>
-<p><em><a href="https://github.com/jonathanperis/rinha2-back-end-dotnet">GitHub</a> · <a href="https://jonathanperis.github.io/">Jonathan Peris</a></em></p>
-
-</section>
-
-<section id="architecture" class="doc-section">
-  <h1 class="page-title">Architecture</h1>
-  <h1>Architecture</h1>
-<h2>Overview</h2>
-<p>The system follows a shared architecture across all Rinha de Backend implementations: two API instances behind an Nginx reverse proxy, with a single PostgreSQL database and an observability stack.</p>
-<h2>Services</h2>
-<table>
-<thead>
-<tr>
-<th>Service</th>
-<th>Role</th>
-<th>CPU</th>
-<th>RAM</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>webapi1</td>
-<td>.NET 9 Native AOT API instance</td>
-<td>0.4</td>
-<td>100MB</td>
-</tr>
-<tr>
-<td>webapi2</td>
-<td>.NET 9 Native AOT API instance</td>
-<td>0.4</td>
-<td>100MB</td>
-</tr>
-<tr>
-<td>nginx</td>
-<td>Reverse proxy / load balancer (least-conn)</td>
-<td>0.2</td>
-<td>20MB</td>
-</tr>
-<tr>
-<td>postgresql</td>
-<td>Database with stored procedures</td>
-<td>0.5</td>
-<td>330MB</td>
-</tr>
-<tr>
-<td>k6</td>
-<td>Load testing</td>
-<td>(not counted)</td>
-<td>(not counted)</td>
-</tr>
-<tr>
-<td>grafana + influxdb</td>
-<td>Observability dashboards</td>
-<td>(not counted)</td>
-<td>(not counted)</td>
-</tr>
-</tbody></table>
-<h2>Load Balancing</h2>
-<p>Nginx uses <code>least_conn</code> strategy to distribute requests across the two API instances.</p>
-<h2>Database</h2>
-<p>Business logic is implemented in PostgreSQL stored procedures. The database is tuned for maximum write performance:</p>
-<ul>
-<li><code>synchronous_commit=0</code> — no wait for WAL flush</li>
-<li><code>fsync=0</code> — skip fsync on writes</li>
-<li><code>full_page_writes=0</code> — skip full page writes</li>
-</ul>
-<h2>Implementation Details</h2>
-<ul>
-<li>Native AOT compilation for zero-JIT startup and minimal memory footprint</li>
-<li>System.Text.Json source generators for reflection-free JSON serialization</li>
-<li>Npgsql 9.0 with connection pooling and multiplexing for high-throughput database access</li>
-<li>Conditional compilation to strip OpenTelemetry in production builds</li>
-</ul>
-
-</section>
-
-<section id="challenge" class="doc-section">
-  <h1 class="page-title">Challenge</h1>
-  <h1>Challenge</h1>
-<h2>Rinha de Backend 2024/Q1</h2>
-<p>The Rinha de Backend is a Brazilian backend programming challenge. The 2024/Q1 edition simulates a fictional bank called &quot;Rinha Financeira&quot; that manages up to 5 named clients, each seeded at startup with a credit limit and initial balance.</p>
-<h2>Endpoints</h2>
-<p>Two API endpoints are required:</p>
-<table>
-<thead>
-<tr>
-<th>Endpoint</th>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>/clientes/{id}/transacoes</code></td>
-<td>POST</td>
-<td>Submit a debit or credit transaction for a client (IDs 1-5)</td>
-</tr>
-<tr>
-<td><code>/clientes/{id}/extrato</code></td>
-<td>GET</td>
-<td>Get a client&#39;s current balance, credit limit, and recent transactions</td>
-</tr>
-</tbody></table>
-<h2>Constraints</h2>
-<p>The challenge imposes strict resource limits across all containers combined:</p>
-<ul>
-<li><strong>1.5 CPU total</strong> shared across all services</li>
-<li><strong>550MB RAM total</strong> shared across all services</li>
-<li>The system is stress tested using Grafana k6 with concurrent users submitting transactions and querying statements</li>
-</ul>
-<h2>Source</h2>
-<p>Full specification: <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1">github.com/zanfranceschi/rinha-de-backend-2024-q1</a></p>
-
-</section>
-
-<section id="ci-cd-pipeline" class="doc-section">
-  <h1 class="page-title">CI CD Pipeline</h1>
-  <h1>CI/CD Pipeline</h1>
-<h2>Workflows</h2>
-<p>This repository uses two GitHub Actions workflows:</p>
-<h3>build-check-webapi.yml</h3>
-<ul>
-<li><strong>Trigger:</strong> Pull requests</li>
-<li><strong>Steps:</strong> Builds the API container and runs a health check to verify the service starts correctly</li>
-<li><strong>Purpose:</strong> Catch build failures and regressions before merging</li>
-</ul>
-<h3>main-release-webapi.yml</h3>
-<ul>
-<li><strong>Trigger:</strong> Push to main branch</li>
-<li><strong>Steps:</strong> Builds a multi-platform Docker image and pushes it to GitHub Container Registry (GHCR)</li>
-<li><strong>Purpose:</strong> Automated release of production-ready container images</li>
-</ul>
-
-</section>
-
-<section id="getting-started" class="doc-section">
-  <h1 class="page-title">Getting Started</h1>
-  <h1>Getting Started</h1>
-<h2>Prerequisites</h2>
-<ul>
-<li>Docker with Docker Compose</li>
-</ul>
-<h2>Clone and Run</h2>
-<pre><code class="language-bash">git clone https://github.com/jonathanperis/rinha2-back-end-dotnet.git
-cd rinha2-back-end-dotnet
-docker compose up nginx -d --build
-</code></pre>
-<h2>Access</h2>
-<p>The API is available at <code>http://localhost:9999</code></p>
-<h2>Endpoints</h2>
-<table>
-<thead>
-<tr>
-<th>Endpoint</th>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>/clientes/{id}/transacoes</code></td>
-<td>POST</td>
-<td>Submit debit or credit transaction</td>
-</tr>
-<tr>
-<td><code>/clientes/{id}/extrato</code></td>
-<td>GET</td>
-<td>Get account balance statement</td>
-</tr>
-</tbody></table>
-<h2>Example Requests</h2>
-<h3>Create Transaction</h3>
-<pre><code class="language-bash">curl -X POST http://localhost:9999/clientes/1/transacoes \
-  -H &quot;Content-Type: application/json&quot; \
-  -d &#39;{&quot;valor&quot;: 1000, &quot;tipo&quot;: &quot;c&quot;, &quot;descricao&quot;: &quot;deposito&quot;}&#39;
-</code></pre>
-<h3>Get Statement</h3>
-<pre><code class="language-bash">curl http://localhost:9999/clientes/1/extrato
-</code></pre>
-
-</section>
-
-<section id="performance" class="doc-section">
-  <h1 class="page-title">Performance</h1>
-  <h1>Performance</h1>
-<h2>Resource Constraints</h2>
-<p>The challenge allows a total of 1.5 CPU and 550MB RAM across all containers.</p>
-<h2>Actual Usage</h2>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Limit</th>
-<th>Actual</th>
-<th>Margin</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RAM</td>
-<td>550MB</td>
-<td>~250MB</td>
-<td>60% below limit</td>
-</tr>
-<tr>
-<td>Response time</td>
-<td>-</td>
-<td>&lt; 800ms</td>
-<td>All requests</td>
-</tr>
-</tbody></table>
-<h2>Results</h2>
-<ul>
-<li>All requests completed under 800ms</li>
-<li>Total RAM usage of approximately 250MB, which is 60% below the 550MB limit</li>
-<li>Perfect Score badge achieved</li>
-</ul>
-<h2>Stress Testing</h2>
-<p>Load tests are run using the shared <a href="https://github.com/jonathanperis/rinha2-back-end-k6">rinha2-back-end-k6</a> test suite, which simulates concurrent users performing debits, credits, validations, and statement queries.</p>
-
-</section>
-
+      {{MAIN_CONTENT}}
     </main>
   </div>
 
