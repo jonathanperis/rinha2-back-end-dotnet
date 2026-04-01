@@ -1,284 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>rinha2-back-end-dotnet | Jonathan Peris</title>
-  <meta name="description" content="High-performance .NET backend for the Rinha de Backend competition. Perfect score. Zero penalties.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VL8EYQNLN3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-VL8EYQNLN3');
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rinha2-back-end-dotnet | System Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        
+        :root {
+            --bg-base: #0a1628;
+            --bg-panel: #0d2137;
+            --accent-primary: #1e90ff;
+            --accent-glow: #00d4ff;
+            --text-main: #e0f0ff;
+            --text-muted: #8ab4f8;
+            --border-color: #1a365d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.6;
+            background-image: linear-gradient(var(--border-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--accent-primary);
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-weight: 700;
+            color: var(--accent-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-glow);
+        }
+
+        /* Main */
+        main {
+            flex: 1;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border-color);
+            padding: 4rem 2rem;
+            background: var(--bg-panel);
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.05);
+        }
+
+        .hero::before, .hero::after {
+            content: '+';
+            position: absolute;
+            color: var(--accent-primary);
+            font-size: 20px;
+        }
+        .hero::before { top: 10px; left: 10px; }
+        .hero::after { bottom: 10px; right: 10px; }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        /* Badges */
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-glow);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(30, 144, 255, 0.1);
+        }
+
+        /* CTAs */
+        .ctas {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-glow);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+            color: var(--bg-base);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(30, 144, 255, 0.1);
+            color: var(--accent-glow);
+            border-color: var(--accent-glow);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: var(--accent-glow);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Constraints */
+        .constraints {
+            border-left: 4px solid var(--accent-primary);
+            background: var(--bg-panel);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .constraints h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .constraint-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .constraint-list li {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .constraint-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent-glow);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-panel);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container">
-      <div class="header-inner">
-        <div class="header-brand">
-          <span class="header-logo"><span class="prompt">~</span> rinha2-back-end-dotnet</span>
+    <nav>
+        <div class="logo">SYS.DOTNET.09</div>
+        <div class="nav-links">
+            <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet">GitHub</a>
+            <a href="./docs/">Docs</a>
         </div>
-        <nav>
-          <ul class="header-nav">
-            <li><a href="#about">About</a></li>
-            <li><a href="#result">Result</a></li>
-            <li><a href="#stack">Stack</a></li>
-            <li><a href="#reports">Reports</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge">
-        <span class="dot"></span>
-        Perfect Score &mdash; USD 100,000.00
-      </div>
-      <h1>Rinha de Backend<br><span class="highlight">.NET Implementation</span></h1>
-      <p class="hero-desc">
-        A high-performance ASP.NET backend built for the
-        <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1" target="_blank" rel="noopener">Rinha de Backend</a>
-        competition (2nd edition) &mdash; a Brazilian developer challenge to build the most performant HTTP API across any language or framework.
-      </p>
-      <div class="hero-links">
-        <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" target="_blank" rel="noopener" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-          Source Code
-        </a>
-        <a href="#reports" class="btn">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.5 1.75a.75.75 0 00-1.5 0v12.5c0 .414.336.75.75.75h14.5a.75.75 0 000-1.5H1.5V1.75zm14.28 2.53a.75.75 0 00-1.06-1.06L10 7.94 7.53 5.47a.75.75 0 00-1.06 0L3.22 8.72a.75.75 0 001.06 1.06L7 7.06l2.47 2.47a.75.75 0 001.06 0l5.25-5.25z"/></svg>
-          Stress Tests
-        </a>
-        <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1/blob/main/RESULTADOS.md" target="_blank" rel="noopener" class="btn">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>
-          Official Results
-        </a>
-      </div>
-    </div>
-  </section>
+    <main>
+        <section class="hero">
+            <h1>rinha2-back-end-dotnet</h1>
+            <p class="tagline">.NET 9 Implementation of Rinha de Backend 2024/Q1. High-throughput fictional bank API under extreme resource constraints.</p>
+            
+            <div class="badges">
+                <span class="badge">.NET 9</span>
+                <span class="badge">C# 12</span>
+                <span class="badge">Nginx</span>
+                <span class="badge">PostgreSQL</span>
+            </div>
 
-  <!-- About -->
-  <section id="about">
-    <div class="container">
-      <p class="section-label">// about</p>
-      <h2 class="section-title">The Competition</h2>
-      <p class="section-text">
-        The <strong>Rinha de Backend - Segunda Edicao</strong> was a performance competition where developers built HTTP APIs
-        handling financial transactions (credits/debits) under strict resource constraints. The APIs had to manage concurrent
-        load while maintaining data consistency &mdash; all within tight CPU and memory limits enforced via Docker.
-      </p>
-      <p class="section-text">
-        Two endpoints were required: <code>POST /clientes/{id}/transacoes</code> for processing transactions and
-        <code>GET /clientes/{id}/extrato</code> for account statements. The evaluation criteria were brutal:
-        98% of responses under 250ms and zero balance inconsistencies.
-      </p>
+            <div class="ctas">
+                <a href="./docs/" class="btn btn-primary">View Documentation &rarr;</a>
+                <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" class="btn btn-outline">View on GitHub &rarr;</a>
+            </div>
+        </section>
 
-      <!-- Architecture -->
-      <div class="arch-block">
-        <span class="comment">// infrastructure</span><br>
-        <span class="keyword">nginx</span> <span class="string">:9999</span> &rarr; load balancer (round-robin)<br>
-        &nbsp;&nbsp;<span class="keyword">api-01</span> <span class="string">:8080</span> &rarr; ASP.NET 9.0 (native AOT)<br>
-        &nbsp;&nbsp;<span class="keyword">api-02</span> <span class="string">:8080</span> &rarr; ASP.NET 9.0 (native AOT)<br>
-        <span class="keyword">postgres</span> <span class="string">:5432</span> &rarr; database (PLpgSQL stored procedures)<br>
-        <br>
-        <span class="comment">// constraints</span><br>
-        total: <span class="string">1.5 vCPU</span> + <span class="string">550MB RAM</span>
-      </div>
-    </div>
-  </section>
+        <section class="constraints">
+            <h2>System Constraints // Parameters</h2>
+            <ul class="constraint-list">
+                <li>2 API Instances</li>
+                <li>1 Nginx Load Balancer</li>
+                <li>1 Postgres Database</li>
+                <li>Max 1.5 CPU Total</li>
+                <li>Max 550MB RAM Total</li>
+            </ul>
+        </section>
 
-  <!-- Result -->
-  <section id="result">
-    <div class="container">
-      <p class="section-label">// competition result</p>
-      <h2 class="section-title">Perfect Score</h2>
-      <p class="section-text">
-        Zero penalties across both evaluation criteria. The API handled the full Gatling stress test
-        with 100% of responses under the SLA threshold and complete balance consistency throughout.
-      </p>
-      <div class="result-card">
-        <div class="result-header">
-          <span class="result-icon">&#127942;</span>
-          <span class="result-title">jonathanperis &mdash; rinha2-back-end-dotnet</span>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">47k+</div>
+                <div class="stat-label">Target Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">< 1.5</div>
+                <div class="stat-label">CPU Cores Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">< 550</div>
+                <div class="stat-label">MB Memory Allocated</div>
+            </div>
         </div>
-        <div class="result-grid">
-          <div class="result-stat">
-            <div class="result-stat-label">SLA Penalty (&gt;249ms)</div>
-            <div class="result-stat-value perfect">USD 0.00</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">Consistency Penalty</div>
-            <div class="result-stat-value perfect">USD 0.00</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">Total Penalty</div>
-            <div class="result-stat-value perfect">USD 0.00</div>
-          </div>
-          <div class="result-stat">
-            <div class="result-stat-label">Final Score</div>
-            <div class="result-stat-value gold">USD 100,000</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </main>
 
-  <!-- Stack -->
-  <section id="stack">
-    <div class="container">
-      <p class="section-label">// tech stack</p>
-      <h2 class="section-title">Built With</h2>
-      <div class="stack-grid">
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #512BD4"></span>
-          <div>
-            <div class="stack-name">C# / ASP.NET 9.0</div>
-            <div class="stack-desc">Native AOT, Slim Builder</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #336791"></span>
-          <div>
-            <div class="stack-name">PostgreSQL</div>
-            <div class="stack-desc">PLpgSQL stored procedures</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #009639"></span>
-          <div>
-            <div class="stack-name">Nginx</div>
-            <div class="stack-desc">Reverse proxy, load balancer</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #2496ED"></span>
-          <div>
-            <div class="stack-name">Docker</div>
-            <div class="stack-desc">Multi-arch containerization</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #7D64FF"></span>
-          <div>
-            <div class="stack-name">Grafana K6</div>
-            <div class="stack-desc">Load testing, HTML reports</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #F46800"></span>
-          <div>
-            <div class="stack-name">Prometheus + Grafana</div>
-            <div class="stack-desc">Metrics & monitoring</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #2088FF"></span>
-          <div>
-            <div class="stack-name">GitHub Actions</div>
-            <div class="stack-desc">CI/CD pipeline</div>
-          </div>
-        </div>
-        <div class="stack-item">
-          <span class="stack-dot" style="background: #E535AB"></span>
-          <div>
-            <div class="stack-name">OpenTelemetry</div>
-            <div class="stack-desc">Distributed tracing</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <footer>
+        <p>Built for Rinha de Backend 2024/Q1</p>
+        <p>by <a href="https://github.com/jonathanperis">jonathanperis</a></p>
+    </footer>
 
-  <!-- Reports -->
-  <section id="reports">
-    <div class="container">
-      <p class="section-label">// stress tests</p>
-      <h2 class="section-title">K6 Load Test Reports</h2>
-      <p class="section-text">
-        Reports generated automatically via
-        <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release-webapi.yml" target="_blank" rel="noopener">GitHub Actions</a>
-        on every push to <code>main</code>. Previously built on Gatling/Scala, now migrated to Grafana K6 for native CI/CD integration.
-      </p>
-      <div id="reports-container">
-        <div class="reports-loading">
-          <span class="spinner"></span> Loading reports...
-        </div>
-      </div>
-      <div id="older-reports-container"></div>
-    </div>
-  </section>
-
-  <!-- Stress Tests -->
-  <section id="stress-tests">
-    <div class="container">
-      <p class="section-label">// stress tests</p>
-      <h2 class="section-title">K6 Test Suite</h2>
-      <p class="section-text">
-        All implementations are validated by the same Grafana K6 stress test suite, originally written in Gatling/Scala.
-      </p>
-      <div class="impl-grid">
-        <a href="https://jonathanperis.github.io/rinha2-back-end-k6/" target="_blank" rel="noopener" class="impl-card">
-          <span class="impl-dot" style="background: #7D64FF"></span>
-          <span class="impl-name">K6 Stress Tests</span>
-          <span class="impl-badge">Test Suite</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Other Implementations -->
-  <section id="implementations">
-    <div class="container">
-      <p class="section-label">// other implementations</p>
-      <h2 class="section-title">Rinha de Backend Family</h2>
-      <p class="section-text">
-        Other implementations of the same challenge, sharing the same PostgreSQL stored-procedure strategy.
-      </p>
-      <div class="impl-grid">
-        <a href="https://jonathanperis.github.io/rinha2-back-end-go/" target="_blank" rel="noopener" class="impl-card">
-          <span class="impl-dot" style="background: #00ADD8"></span>
-          <span class="impl-name">Go</span>
-          <span class="impl-badge-learning">Learning Purposes</span>
-        </a>
-        <a href="https://jonathanperis.github.io/rinha2-back-end-rust/" target="_blank" rel="noopener" class="impl-card">
-          <span class="impl-dot" style="background: #DEA584"></span>
-          <span class="impl-name">Rust</span>
-          <span class="impl-badge-learning">Learning Purposes</span>
-        </a>
-        <a href="https://jonathanperis.github.io/rinha2-back-end-python/" target="_blank" rel="noopener" class="impl-card">
-          <span class="impl-dot" style="background: #3776AB"></span>
-          <span class="impl-name">Python</span>
-          <span class="impl-badge-learning">Learning Purposes</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <span class="footer-text">Built by <a href="https://jonathanperis.github.io/" target="_blank" rel="noopener">Jonathan Peris</a></span>
-        <div class="footer-links">
-          <a href="https://github.com/jonathanperis" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1" target="_blank" rel="noopener">Competition</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/script.js"></script>
 </body>
 </html>
