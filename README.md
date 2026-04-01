@@ -1,72 +1,69 @@
 # rinha2-back-end-dotnet
 
-High-performance backend implementation for the **Rinha de Backend** challenge (2nd Edition, 2024/Q1) — built with **ASP.NET 9**, **PostgreSQL**, and **Nginx**.
+> C#/.NET 9 Native AOT implementation for the Rinha de Backend 2024/Q1 challenge with Npgsql multiplexing and PostgreSQL stored procedures
 
-**Live results:** [jonathanperis.github.io/rinha2-back-end-dotnet](https://jonathanperis.github.io/rinha2-back-end-dotnet/)
+[![CI](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check-webapi.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check-webapi.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
 ## About
 
-A C#/.NET implementation of the Brazilian backend programming challenge that pushes API performance to the limit under strict resource constraints. The API manages fictional bank clients with credit/debit transactions and balance statements.
-
-### Endpoints
-
-- `POST /clientes/{id}/transacoes` — Create a transaction (credit or debit)
-- `GET /clientes/{id}/extrato` — Get client balance and recent transactions
-
-### Results
-
-All requests completed under 800ms using only **250MB of RAM** — 60% less than the challenge allows.
+A C#/.NET implementation of the Brazilian backend challenge Rinha de Backend 2024/Q1, where a fictional bank API must handle concurrent transactions under strict resource constraints (1.5 CPU, 550MB RAM total). This implementation uses ASP.NET Core 9 Minimal API with Native AOT compilation for zero-JIT startup, System.Text.Json source generators for reflection-free serialization, and Npgsql multiplexing for high-throughput database access. Achieved a Perfect Score badge with all requests under 800ms at 250MB RAM usage.
 
 ## Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| ASP.NET 9.0 | Minimal API with Native AOT compilation |
-| PostgreSQL | Database with stored procedures and UNLOGGED tables |
-| Nginx | Reverse proxy / load balancer (least-conn) |
-| Docker | Multi-stage build and orchestration |
-| Npgsql 9.0 | PostgreSQL driver with connection pooling |
-| OpenTelemetry | Tracing, metrics, and logging |
-| Grafana + InfluxDB | Observability and load test metrics |
-| k6 | Stress testing |
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| .NET / ASP.NET Core | 9.0 | Minimal API with Native AOT compilation |
+| Npgsql | 9.0 | PostgreSQL driver with connection pooling and multiplexing |
+| PostgreSQL | - | Database with stored procedures and tuned write settings |
+| Nginx | 1.27 | Reverse proxy and load balancer (least-conn) |
+| Docker | - | Multi-stage build and orchestration |
+| k6 | - | Stress testing |
 
-## Architecture
+## Features
 
-- **2 API instances** behind Nginx (0.4 CPU, 100MB RAM each)
-- **1 PostgreSQL** database (0.5 CPU, 330MB RAM)
-- **1 Nginx** load balancer (0.2 CPU, 20MB RAM)
-- Business logic pushed into PostgreSQL stored functions
-- Native AOT compilation for minimal startup time and memory footprint
-- System.Text.Json source generators for zero-reflection serialization
-
-## Performance Optimizations
-
-- Native AOT (ahead-of-time compilation)
-- Trimming and extra optimization flags
-- PostgreSQL tuned: `synchronous_commit=0`, `fsync=0`, UNLOGGED tables
-- Connection pooling with multiplexing via Npgsql
-- Conditional compilation to strip telemetry in production builds
+- Native AOT compilation for zero-JIT startup and minimal memory footprint
+- System.Text.Json source generators for reflection-free JSON serialization
+- Npgsql connection pool with multiplexing for concurrent query throughput
+- PostgreSQL stored procedures for server-side business logic
+- PostgreSQL tuned with synchronous_commit=0, fsync=0, full_page_writes=0
+- Conditional compilation to strip OpenTelemetry in production builds
 
 ## Getting Started
 
+### Prerequisites
+
+- Docker with Docker Compose
+
+### Quick Start
+
 ```bash
+git clone https://github.com/jonathanperis/rinha2-back-end-dotnet.git
+cd rinha2-back-end-dotnet
 docker compose up nginx -d --build
 ```
 
-The API will be available at `http://localhost:9999`.
+API available at `http://localhost:9999`
 
-## Stress Tests
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/clientes/{id}/transacoes` | POST | Submit debit or credit transaction |
+| `/clientes/{id}/extrato` | GET | Get account balance statement |
 
-- [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) — Grafana k6 stress test suite used across all implementations
+## Project Structure
 
-## Other Implementations
+```
+rinha2-back-end-dotnet/
+├── src/WebApi/         — API implementation
+├── docker-compose.yml  — Full stack: API x2, Nginx, PostgreSQL, k6, observability
+└── .github/workflows/  — CI/CD pipelines
+```
 
-- [rinha2-back-end-go](https://github.com/jonathanperis/rinha2-back-end-go) — Go ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
-- [rinha2-back-end-rust](https://github.com/jonathanperis/rinha2-back-end-rust) — Rust ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
-- [rinha2-back-end-python](https://github.com/jonathanperis/rinha2-back-end-python) — Python ![Learning Purposes](https://img.shields.io/badge/📚_Learning_Purposes-blue?style=flat-square)
+## CI/CD
+
+Two GitHub Actions workflows: `build-check-webapi.yml` runs on pull requests to build and health-check the API, and `main-release-webapi.yml` runs on the main branch to build a multi-platform Docker image and push it to GHCR.
 
 ## License
 
-Licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE)
