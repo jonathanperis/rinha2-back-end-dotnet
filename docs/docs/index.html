@@ -5,19 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>rinha2-back-end-dotnet - Documentation</title>
   <meta name="description" content=".NET 9 implementation of Rinha de Backend 2024/Q1 — fictional bank API built for performance under constraints">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --sidebar-bg: #111111;
-      --text-primary: #ededed;
-      --text-muted: #888888;
-      --text-body: #c8c8c8;
-      --accent: #7c6af7;
-      --accent-hover: #9b8df9;
-      --code-bg: #1e1e2e;
-      --code-text: #cdd6f4;
-      --border: #1f1f2e;
-      --code-border: #2a2a3e;
+      --bg: #0a1628;
+      --sidebar-bg: #0d2137;
+      --accent: #1e90ff;
+      --accent-glow: #00d4ff;
+      --text: #e0f0ff;
+      --text-muted: #8ab4f8;
+      --border: #1a365d;
+      --surface: #0d1f3c;
+      --surface-hover: #1a2d50;
+      --text-primary: var(--text);
+      --text-body: var(--text);
+      --code-bg: var(--surface);
+      --code-text: var(--text);
+      --code-border: var(--border);
       --sidebar-width: 260px;
     }
 
@@ -25,13 +29,15 @@
     
     html {
       scroll-behavior: smooth;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Space Mono', monospace;
     }
     
     body {
       margin: 0;
       padding: 0;
       background: var(--bg);
+      background-image: linear-gradient(rgba(26,54,93,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(26,54,93,0.4) 1px, transparent 1px);
+      background-size: 30px 30px;
       color: var(--text-primary);
       display: flex;
     }
@@ -130,7 +136,7 @@
 
     .nav-item.active {
       color: var(--accent);
-      background: rgba(124, 106, 247, 0.1);
+      background: rgba(30, 144, 255, 0.1);
       font-weight: 500;
     }
 
@@ -229,7 +235,7 @@
     }
 
     code {
-      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-family: 'Space Mono', monospace;
       background: var(--code-bg);
       color: var(--code-text);
       border-radius: 4px;
@@ -254,7 +260,7 @@
     }
 
     th {
-      background: #1a1a2e;
+      background: var(--sidebar-bg);
       color: var(--text-primary);
       font-weight: 600;
       border-bottom: 1px solid var(--border);
@@ -305,7 +311,7 @@
     }
     
     .search-highlight {
-      background: rgba(124, 106, 247, 0.3);
+      background: rgba(30, 144, 255, 0.3);
       border-radius: 2px;
       padding: 0 2px;
     }
@@ -407,6 +413,7 @@
 </ul>
     </div>
     <div class="sidebar-footer">
+      <a href="../" class="back-home">← Back to home</a>
       <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet" target="_blank" rel="noopener noreferrer">View on GitHub</a>
       <div>Built by Jonathan Peris</div>
     </div>
