@@ -1,7 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "/"
+    directory: "/src/WebApi"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/src/WebApi"
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"

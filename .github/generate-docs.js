@@ -5,7 +5,7 @@ const marked = require('marked');
 const DOCS_TITLE = process.env.DOCS_TITLE || 'Documentation';
 const DOCS_DESCRIPTION = process.env.DOCS_DESCRIPTION || '';
 const GITHUB_URL = process.env.GITHUB_URL || '';
-const OUTPUT_PATH = process.env.OUTPUT_PATH || 'docs/index.html';
+const OUTPUT_PATH = process.env.OUTPUT_PATH || 'docs/docs/index.html';
 const TEMPLATE_PATH = process.env.TEMPLATE_PATH || path.join(__dirname, 'template.html');
 
 const WIKI_DIR = path.join(process.cwd(), 'wiki');
