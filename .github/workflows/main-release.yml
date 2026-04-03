@@ -130,16 +130,3 @@ jobs:
           name: stress-test-report
           path: ./prod/conf/stress-test/reports/stress-test-report.html
 
-      - name: Prepare Report for GitHub Pages
-        run: |
-          TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          mkdir -p gh-pages-reports
-          cp ./prod/conf/stress-test/reports/stress-test-report.html gh-pages-reports/stress-test-report-${TIMESTAMP}.html
-
-      - name: Deploy Report to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: gh-pages-reports
-          branch: gh-pages
-          target-folder: reports
-          clean: false
