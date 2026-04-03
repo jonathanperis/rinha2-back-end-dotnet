@@ -49,21 +49,18 @@ jobs:
             fetch-depth: 0
 
       - name: Build and Run Docker Compose for Healthcheck Test
-        run: |
-          docker compose -f ./docker-compose.yml up nginx -d
-          sleep 10
+        run: docker compose -f ./docker-compose.yml up nginx --wait
+
+      - name: Dump container logs on failure
+        if: failure()
+        run: docker compose -f ./docker-compose.yml logs db
 
       - name: Test Healthcheck Endpoint
         run: |
-          for i in {1..20}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9999/healthz)
-            if [ "$STATUS" -eq 200 ]; then
-              echo "Healthcheck passed with status $STATUS"
-              exit 0
-            else
-              echo "Healthcheck attempt $i failed with status $STATUS. Retrying..."
-              sleep 2
-            fi
-          done
-          echo "Healthcheck failed after 20 attempts."
-          exit 1
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9999/healthz)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "Healthcheck passed with status $STATUS"
+          else
+            echo "Healthcheck failed with status $STATUS"
+            exit 1
+          fi

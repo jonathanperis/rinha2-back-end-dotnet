@@ -47,8 +47,8 @@ COPY public."Transacoes" ("Id", "Valor", "ClienteId", "Tipo", "Descricao", "Real
 \.
 
 -- Critical fix for sequences
-SELECT pg_catalog.setval('public."Clientes_Id_seq"', (SELECT MAX("Id") FROM public."Clientes"), true);
-SELECT pg_catalog.setval('public."Transacoes_Id_seq"', (SELECT MAX("Id") FROM public."Transacoes"), true);
+SELECT pg_catalog.setval('public."Clientes_Id_seq"', COALESCE((SELECT MAX("Id") FROM public."Clientes"), 1), true);
+SELECT pg_catalog.setval('public."Transacoes_Id_seq"', COALESCE((SELECT MAX("Id") FROM public."Transacoes"), 1), true);
 
 ALTER TABLE ONLY public."Clientes"
     ADD CONSTRAINT "PK_Clientes" PRIMARY KEY ("Id");
