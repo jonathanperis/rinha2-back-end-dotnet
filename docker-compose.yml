@@ -38,7 +38,7 @@ services:
       - "5011:8080"
 
   db:
-    image: postgres
+    image: postgres:16
     container_name: db-rinha
     restart: always
     # depends_on:
