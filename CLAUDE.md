@@ -104,7 +104,7 @@ rinha2-back-end-dotnet/
 | Build Check | `build-check.yml` | PRs to main, push to main | dotnet build (Release, AOT=true) + Docker health check |
 | Main Release | `main-release.yml` | Push to main | Multi-platform Docker push to GHCR + k6 load test |
 | CodeQL | `codeql.yml` | PRs to main, push to main, weekly | Security analysis for C# |
-| Deploy Docs | `deploy.yml` | Push to main, wiki changes | Clone wiki → generate HTML → deploy to GitHub Pages |
+| Deploy | `deploy.yml` | Push to main | Deploy `docs/` to GitHub Pages |
 
 - **Image:** `ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest` (amd64, arm64/v8)
 - **Docs:** https://jonathanperis.github.io/rinha2-back-end-dotnet/ (GitHub Actions Pages deployment)

@@ -1,9 +1,8 @@
-name: Deploy Docs
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
-  gollum:
   workflow_dispatch:
 
 permissions:
@@ -21,30 +20,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - uses: actions/checkout@v6
-
-      - name: Clone wiki
-        run: git clone https://github.com/${{ github.repository }}.wiki.git wiki/ || echo "Wiki not found, skipping"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-
-      - name: Install marked
-        run: npm install marked --no-save
-
-      - name: Generate docs
-        env:
-          DOCS_TITLE: "rinha2-back-end-dotnet"
-          DOCS_DESCRIPTION: ".NET 9 implementation of Rinha de Backend 2024/Q1 — fictional bank API built for performance under constraints"
-          GITHUB_URL: "https://github.com/jonathanperis/rinha2-back-end-dotnet"
-          OUTPUT_PATH: "docs/docs/index.html"
-          TEMPLATE_PATH: ".github/docs-template.html"
-        run: node .github/generate-docs.js
-
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v4
         with:
