@@ -116,6 +116,8 @@ rinha2-back-end-dotnet/
 
 - **All changes require a branch + PR** — never commit directly to main
 - **PRs are rebase-only** — no merge commits, no squash (required linear history)
+- **Always sync main before creating a branch** — `git fetch origin main && git pull --rebase origin main` before `git checkout -b`
+- **Always sync main before opening a PR** — fetch and pull main again to avoid drift and conflicts
 - **Branch naming:** `feat/`, `fix/`, `docs/`, `chore/`, `refactor/`
 - **GitHub operations:** always use `gh` CLI (not curl/HTTP API)
 - **Repo-wide files** (SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, etc.) live in `jonathanperis/.github` — do NOT create them here
