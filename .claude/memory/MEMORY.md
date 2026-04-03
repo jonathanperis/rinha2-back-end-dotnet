@@ -1,1 +1,5 @@
 - [Architecture](architecture.md) — Native AOT, source-gen JSON, conditional OpenTelemetry, Npgsql multiplexing, build flag matrix
+- [Workflow](feedback_workflow.md) — Branch+PR strategy required; PRs are rebase-only (no merge commits)
+- [GitHub Conventions](feedback_github.md) — Repo-wide files in jonathanperis/.github; always use gh CLI
+- [User Profile](user_profile.md) — Senior dev, multiple Rinha implementations, shared infra pattern
+- [GitHub Pages & Docs](reference_github_pages.md) — Docs site, wiki, deploy workflow, GHCR image, stress test reports

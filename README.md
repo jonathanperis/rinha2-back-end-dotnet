@@ -2,7 +2,9 @@
 
 > C#/.NET 9 Native AOT implementation for the Rinha de Backend 2024/Q1 challenge with Npgsql multiplexing and PostgreSQL stored procedures
 
-[![CI](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check-webapi.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check-webapi.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Build Check](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check.yml) [![Main Release](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml) [![CodeQL](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/codeql.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/codeql.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**[Live demo →](https://jonathanperis.github.io/rinha2-back-end-dotnet/)** | **[Documentation →](https://github.com/jonathanperis/rinha2-back-end-dotnet/wiki)**
 
 ---
 
@@ -15,7 +17,7 @@ A C#/.NET implementation of the Brazilian backend challenge Rinha de Backend 202
 | Technology | Version | Purpose |
 |-----------|---------|---------|
 | .NET / ASP.NET Core | 9.0 | Minimal API with Native AOT compilation |
-| Npgsql | 9.0 | PostgreSQL driver with connection pooling and multiplexing |
+| Npgsql | 10.0.2 | PostgreSQL driver with connection pooling and multiplexing |
 | PostgreSQL | - | Database with stored procedures and tuned write settings |
 | Nginx | 1.27 | Reverse proxy and load balancer (least-conn) |
 | Docker | - | Multi-stage build and orchestration |
@@ -50,19 +52,37 @@ API available at `http://localhost:9999`
 |----------|--------|-------------|
 | `/clientes/{id}/transacoes` | POST | Submit debit or credit transaction |
 | `/clientes/{id}/extrato` | GET | Get account balance statement |
+| `/healthz` | GET | Health check |
 
 ## Project Structure
 
 ```
 rinha2-back-end-dotnet/
-├── src/WebApi/         — API implementation
-├── docker-compose.yml  — Full stack: API x2, Nginx, PostgreSQL, k6, observability
-└── .github/workflows/  — CI/CD pipelines
+├── src/WebApi/
+│   ├── Program.cs            — Complete API (route handlers, DI, config)
+│   ├── WebApi.csproj         — Project config (AOT, Trim, ExtraOptimize flags)
+│   └── Dockerfile            — Multi-stage build
+├── docker-entrypoint-initdb.d/
+│   └── rinha.dump.sql        — Schema, stored procedures, seed data
+├── docker-compose.yml        — Dev stack: API x2, Nginx, PostgreSQL, observability
+├── prod/docker-compose.yml   — Prod stack with GHCR images
+├── nginx.conf                — Load balancer (least_conn)
+├── grafana/                  — Pre-configured dashboards
+├── wiki/                     — GitHub Wiki (submodule)
+├── docs/                     — GitHub Pages site + k6 reports
+└── .github/workflows/        — CI/CD pipelines
 ```
 
 ## CI/CD
 
-Two GitHub Actions workflows: `build-check-webapi.yml` runs on pull requests to build and health-check the API, and `main-release-webapi.yml` runs on the main branch to build a multi-platform Docker image and push it to GHCR.
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| Build Check | PRs to main | Build + Docker health check |
+| Main Release | Push to main | Multi-platform Docker push to GHCR + k6 load test |
+| CodeQL | PRs + weekly | Security analysis |
+| Deploy Docs | Push to main + wiki changes | Generate docs site from wiki |
+
+Docker image: `ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest`
 
 ## License
 
