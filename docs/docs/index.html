@@ -380,6 +380,13 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VL8EYQNLN3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VL8EYQNLN3');
+  </script>
 </head>
 <body>
 
@@ -407,7 +414,7 @@
   <li><a href="#home" class="nav-item">Home</a></li>
   <li><a href="#architecture" class="nav-item">Architecture</a></li>
   <li><a href="#challenge" class="nav-item">Challenge</a></li>
-  <li><a href="#ci-cd-pipeline" class="nav-item">CI CD Pipeline</a></li>
+  <li><a href="#ci-cd-pipeline" class="nav-item">CI/CD Pipeline</a></li>
   <li><a href="#getting-started" class="nav-item">Getting Started</a></li>
   <li><a href="#performance" class="nav-item">Performance</a></li>
 </ul>
@@ -425,7 +432,6 @@
       
 <section id="home" class="doc-section">
   <h1 class="page-title">Home</h1>
-  <h1>rinha2-back-end-dotnet</h1>
 <p>C#/.NET 9 Native AOT implementation for the Rinha de Backend 2024/Q1 challenge. Manages a fictional bank API with transaction processing and balance statements under strict resource constraints (1.5 CPU, 550MB RAM total across all containers).</p>
 <h2>Wiki Pages</h2>
 <table>
@@ -460,7 +466,7 @@
 <ul>
 <li>.NET 9 with Native AOT compilation for zero-JIT startup</li>
 <li>System.Text.Json source generators for reflection-free serialization</li>
-<li>Npgsql 9.0 with connection pooling and multiplexing</li>
+<li>Npgsql 10.0.2 with connection pooling and multiplexing</li>
 <li>PostgreSQL stored procedures for server-side business logic</li>
 <li>All requests under 800ms at 250MB RAM usage</li>
 <li>Perfect Score badge achieved</li>
@@ -472,7 +478,6 @@
 
 <section id="architecture" class="doc-section">
   <h1 class="page-title">Architecture</h1>
-  <h1>Architecture</h1>
 <h2>Overview</h2>
 <p>The system follows a shared architecture across all Rinha de Backend implementations: two API instances behind an Nginx reverse proxy, with a single PostgreSQL database and an observability stack.</p>
 <h2>Services</h2>
@@ -535,7 +540,7 @@
 <ul>
 <li>Native AOT compilation for zero-JIT startup and minimal memory footprint</li>
 <li>System.Text.Json source generators for reflection-free JSON serialization</li>
-<li>Npgsql 9.0 with connection pooling and multiplexing for high-throughput database access</li>
+<li>Npgsql 10.0.2 with connection pooling and multiplexing for high-throughput database access</li>
 <li>Conditional compilation to strip OpenTelemetry in production builds</li>
 </ul>
 
@@ -543,7 +548,6 @@
 
 <section id="challenge" class="doc-section">
   <h1 class="page-title">Challenge</h1>
-  <h1>Challenge</h1>
 <h2>Rinha de Backend 2024/Q1</h2>
 <p>The Rinha de Backend is a Brazilian backend programming challenge. The 2024/Q1 edition simulates a fictional bank called &quot;Rinha Financeira&quot; that manages up to 5 named clients, each seeded at startup with a credit limit and initial balance.</p>
 <h2>Endpoints</h2>
@@ -580,28 +584,40 @@
 </section>
 
 <section id="ci-cd-pipeline" class="doc-section">
-  <h1 class="page-title">CI CD Pipeline</h1>
-  <h1>CI/CD Pipeline</h1>
+  <h1 class="page-title">CI/CD Pipeline</h1>
 <h2>Workflows</h2>
-<p>This repository uses two GitHub Actions workflows:</p>
-<h3>build-check-webapi.yml</h3>
+<p>This repository uses four GitHub Actions workflows:</p>
+<h3>build-check.yml</h3>
 <ul>
-<li><strong>Trigger:</strong> Pull requests</li>
-<li><strong>Steps:</strong> Builds the API container and runs a health check to verify the service starts correctly</li>
+<li><strong>Trigger:</strong> Pull requests to main, push to main</li>
+<li><strong>Steps:</strong> Builds the API (Release, AOT=true) and runs a Docker health check to verify the service starts correctly</li>
 <li><strong>Purpose:</strong> Catch build failures and regressions before merging</li>
 </ul>
-<h3>main-release-webapi.yml</h3>
+<h3>main-release.yml</h3>
 <ul>
 <li><strong>Trigger:</strong> Push to main branch</li>
-<li><strong>Steps:</strong> Builds a multi-platform Docker image and pushes it to GitHub Container Registry (GHCR)</li>
-<li><strong>Purpose:</strong> Automated release of production-ready container images</li>
+<li><strong>Steps:</strong> Builds a multi-platform Docker image (amd64, arm64/v8), pushes it to GitHub Container Registry (GHCR), and runs k6 load tests</li>
+<li><strong>Purpose:</strong> Automated release of production-ready container images with stress test validation</li>
 </ul>
+<h3>codeql.yml</h3>
+<ul>
+<li><strong>Trigger:</strong> Pull requests to main, push to main, weekly schedule</li>
+<li><strong>Steps:</strong> Runs GitHub CodeQL security analysis for C#</li>
+<li><strong>Purpose:</strong> Automated security vulnerability detection</li>
+</ul>
+<h3>deploy.yml</h3>
+<ul>
+<li><strong>Trigger:</strong> Push to main branch</li>
+<li><strong>Steps:</strong> Deploys the <code>docs/</code> directory to GitHub Pages using the GitHub Actions deployment model</li>
+<li><strong>Purpose:</strong> Publish the project documentation site</li>
+</ul>
+<h2>Docker Image</h2>
+<p>Published to <code>ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest</code> (amd64, arm64/v8)</p>
 
 </section>
 
 <section id="getting-started" class="doc-section">
   <h1 class="page-title">Getting Started</h1>
-  <h1>Getting Started</h1>
 <h2>Prerequisites</h2>
 <ul>
 <li>Docker with Docker Compose</li>
@@ -632,6 +648,11 @@ docker compose up nginx -d --build
 <td>GET</td>
 <td>Get account balance statement</td>
 </tr>
+<tr>
+<td><code>/healthz</code></td>
+<td>GET</td>
+<td>Health check</td>
+</tr>
 </tbody></table>
 <h2>Example Requests</h2>
 <h3>Create Transaction</h3>
@@ -647,7 +668,6 @@ docker compose up nginx -d --build
 
 <section id="performance" class="doc-section">
   <h1 class="page-title">Performance</h1>
-  <h1>Performance</h1>
 <h2>Resource Constraints</h2>
 <p>The challenge allows a total of 1.5 CPU and 550MB RAM across all containers.</p>
 <h2>Actual Usage</h2>
