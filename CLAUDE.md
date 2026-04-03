@@ -99,6 +99,23 @@ rinha2-back-end-dotnet/
 
 ## CI/CD
 
-- **PR:** dotnet build (Release, AOT=true) + Docker health check
-- **Main:** Build + Multi-platform Docker push to GHCR + k6 load test + GitHub Pages report
-- **Image:** `ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest`
+| Workflow | File | Trigger | Purpose |
+|----------|------|---------|---------|
+| Build Check | `build-check.yml` | PRs to main, push to main | dotnet build (Release, AOT=true) + Docker health check |
+| Main Release | `main-release.yml` | Push to main | Multi-platform Docker push to GHCR + k6 load test + GitHub Pages report |
+| CodeQL | `codeql.yml` | PRs to main, push to main, weekly | Security analysis for C# |
+| Deploy Docs | `deploy-docs.yml` | Push to main, wiki changes | Clone wiki → generate HTML → commit to docs/ |
+
+- **Image:** `ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest` (amd64, arm64/v8)
+- **Docs:** https://jonathanperis.github.io/rinha2-back-end-dotnet/ (GitHub Pages from `docs/`)
+- **Wiki:** https://github.com/jonathanperis/rinha2-back-end-dotnet/wiki
+
+---
+
+## Contribution Guidelines
+
+- **All changes require a branch + PR** — never commit directly to main
+- **PRs are rebase-only** — no merge commits, no squash (required linear history)
+- **Branch naming:** `feat/`, `fix/`, `docs/`, `chore/`, `refactor/`
+- **GitHub operations:** always use `gh` CLI (not curl/HTTP API)
+- **Repo-wide files** (SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, etc.) live in `jonathanperis/.github` — do NOT create them here
