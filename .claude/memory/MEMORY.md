@@ -1,0 +1,1 @@
+- [Architecture](architecture.md) — Native AOT, source-gen JSON, conditional OpenTelemetry, Npgsql multiplexing, build flag matrix
