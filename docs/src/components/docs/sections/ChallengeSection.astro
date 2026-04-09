@@ -1,0 +1,44 @@
+---
+---
+
+<section id="challenge" class="doc-section">
+  <h1 class="page-title">Challenge</h1>
+
+  <h2>Rinha de Backend 2024/Q1</h2>
+  <p>The Rinha de Backend is a Brazilian backend programming challenge. The 2024/Q1 edition simulates a fictional bank called &quot;Rinha Financeira&quot; that manages up to 5 named clients, each seeded at startup with a credit limit and initial balance.</p>
+
+  <h2>Endpoints</h2>
+  <p>Two API endpoints are required:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/clientes/&#123;id&#125;/transacoes</code></td>
+        <td>POST</td>
+        <td>Submit a debit or credit transaction for a client (IDs 1–5)</td>
+      </tr>
+      <tr>
+        <td><code>/clientes/&#123;id&#125;/extrato</code></td>
+        <td>GET</td>
+        <td>Get a client's current balance, credit limit, and recent transactions</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Constraints</h2>
+  <p>The challenge imposes strict resource limits across all containers combined:</p>
+  <ul>
+    <li><strong>1.5 CPU total</strong> shared across all services</li>
+    <li><strong>550MB RAM total</strong> shared across all services</li>
+    <li>The system is stress tested using Grafana k6 with concurrent users submitting transactions and querying statements</li>
+  </ul>
+
+  <h2>Source</h2>
+  <p>Full specification: <a href="https://github.com/zanfranceschi/rinha-de-backend-2024-q1" target="_blank" rel="noopener noreferrer">github.com/zanfranceschi/rinha-de-backend-2024-q1</a></p>
+</section>

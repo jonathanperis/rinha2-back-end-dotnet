@@ -1,0 +1,89 @@
+---
+import '../styles/globals.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'rinha2-back-end-dotnet | .NET Precision',
+  description = 'High-performance banking API for the Rinha de Backend challenge. Built with .NET 9 Native AOT, ASP.NET Minimal APIs, and Npgsql multiplexing. Handles concurrent transactions under strict resource constraints (1.5 CPU, 550MB RAM).'
+} = Astro.props;
+
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  'name': 'Rinha de Backend — .NET',
+  'description': description,
+  'url': 'https://jonathanperis.github.io/rinha2-back-end-dotnet/',
+  'codeRepository': 'https://github.com/jonathanperis/rinha2-back-end-dotnet',
+  'programmingLanguage': 'C#',
+  'runtimePlatform': '.NET 9',
+  'license': 'https://github.com/jonathanperis/rinha2-back-end-dotnet/blob/main/LICENSE',
+  'author': {
+    '@type': 'Person',
+    'name': 'Jonathan Peris',
+    'url': 'https://jonathanperis.github.io/'
+  }
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content=".NET 9, C#, ASP.NET, Native AOT, Npgsql, PostgreSQL, banking API, Rinha de Backend, performance, load testing" />
+    <link rel="canonical" href="https://jonathanperis.github.io/rinha2-back-end-dotnet/" />
+    <meta name="theme-color" content="#1e90ff" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://jonathanperis.github.io/rinha2-back-end-dotnet/" />
+    <meta property="og:site_name" content="rinha2-back-end-dotnet" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:creator" content="@jperis_silva" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- Google Analytics -->
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    <script is:inline define:vars={{ GA_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    </script>
+
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <div class="glow"></div>
+
+    <slot />
+  </body>
+</html>

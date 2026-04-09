@@ -1,0 +1,57 @@
+---
+---
+
+<section id="getting-started" class="doc-section">
+  <h1 class="page-title">Getting Started</h1>
+
+  <h2>Prerequisites</h2>
+  <ul>
+    <li>Docker with Docker Compose</li>
+  </ul>
+
+  <h2>Clone and Run</h2>
+  <pre><code>git clone https://github.com/jonathanperis/rinha2-back-end-dotnet.git
+cd rinha2-back-end-dotnet
+docker compose up nginx -d --build</code></pre>
+
+  <h2>Access</h2>
+  <p>The API is available at <code>http://localhost:9999</code></p>
+
+  <h2>Endpoints</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/clientes/&#123;id&#125;/transacoes</code></td>
+        <td>POST</td>
+        <td>Submit debit or credit transaction</td>
+      </tr>
+      <tr>
+        <td><code>/clientes/&#123;id&#125;/extrato</code></td>
+        <td>GET</td>
+        <td>Get account balance statement</td>
+      </tr>
+      <tr>
+        <td><code>/healthz</code></td>
+        <td>GET</td>
+        <td>Health check</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Example Requests</h2>
+
+  <h3>Create Transaction</h3>
+  <pre><code>curl -X POST http://localhost:9999/clientes/1/transacoes \
+  -H "Content-Type: application/json" \
+  -d '&#123;"valor": 1000, "tipo": "c", "descricao": "deposito"&#125;'</code></pre>
+
+  <h3>Get Statement</h3>
+  <pre><code>curl http://localhost:9999/clientes/1/extrato</code></pre>
+</section>

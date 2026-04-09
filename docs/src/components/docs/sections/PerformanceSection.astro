@@ -1,0 +1,46 @@
+---
+---
+
+<section id="performance" class="doc-section">
+  <h1 class="page-title">Performance</h1>
+
+  <h2>Resource Constraints</h2>
+  <p>The challenge allows a total of 1.5 CPU and 550MB RAM across all containers.</p>
+
+  <h2>Actual Usage</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Limit</th>
+        <th>Actual</th>
+        <th>Margin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>RAM</td>
+        <td>550MB</td>
+        <td>~250MB</td>
+        <td>60% below limit</td>
+      </tr>
+      <tr>
+        <td>Response time</td>
+        <td>—</td>
+        <td>&lt; 800ms</td>
+        <td>All requests</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Results</h2>
+  <ul>
+    <li>All requests completed under 800ms</li>
+    <li>Total RAM usage of approximately 250MB, which is 60% below the 550MB limit</li>
+    <li>Perfect Score badge achieved</li>
+    <li>Native AOT eliminates JIT warm-up latency for consistent cold-start performance</li>
+  </ul>
+
+  <h2>Stress Testing</h2>
+  <p>Load tests are run using the shared <a href="https://github.com/jonathanperis/rinha2-back-end-k6" target="_blank" rel="noopener noreferrer">rinha2-back-end-k6</a> test suite, which simulates concurrent users performing debits, credits, validations, and statement queries.</p>
+</section>

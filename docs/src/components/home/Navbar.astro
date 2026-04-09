@@ -1,0 +1,15 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'SYS.DOTNET.09' } = Astro.props;
+---
+
+<nav>
+  <div class="logo">{title}</div>
+  <div class="nav-links">
+    <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet">GitHub</a>
+    <a href="./docs/">Docs</a>
+  </div>
+</nav>

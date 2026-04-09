@@ -1,0 +1,117 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface ArchCard {
+  title: string;
+  description: string;
+}
+
+const stats: Stat[] = [
+  { value: '47k+', label: 'Target Requests' },
+  { value: '1.5', label: 'Max CPU Limit' },
+  { value: '550MB', label: 'Max RAM Limit' }
+];
+
+const archCards: ArchCard[] = [
+  {
+    title: 'Architecture',
+    description: '2x API Instances, 1x Nginx LB, 1x Postgres Database.'
+  },
+  {
+    title: 'The Challenge',
+    description: 'Build a fictional bank API handling concurrent transactions with high throughput and data consistency.'
+  }
+];
+
+const stressTestMetrics = [
+  { value: '46k+', label: 'Requests/Second' },
+  { value: '<50ms', label: 'P95 Latency' },
+  { value: '99.9%', label: 'Success Rate' }
+];
+
+const reportsDir = path.join(process.cwd(), 'public/reports');
+const allReports = fs.readdirSync(reportsDir)
+  .filter(f => f.endsWith('.html'))
+  .sort()
+  .reverse();
+
+function parseReportMeta(filename: string) {
+  const match = filename.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
+  if (!match) return { date: filename, time: '' };
+  const [, year, month, day, hour, minute] = match;
+  return {
+    date: `${year}-${month}-${day}`,
+    time: `${hour}:${minute}`,
+  };
+}
+
+const recentReports = allReports.slice(0, 8).map(file => ({
+  file,
+  ...parseReportMeta(file),
+}));
+---
+
+<section class="dashboard">
+  <div class="stats-grid">
+    {stats.map(stat => (
+      <div class="stat-item">
+        <h3>{stat.value}</h3>
+        <p>{stat.label}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="arch-info">
+    {archCards.map(card => (
+      <div class="arch-card">
+        <h4>{card.title}</h4>
+        <p>{card.description}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="stress-tests">
+  <h3>⚡ Stress Test Results</h3>
+  <p class="stress-intro">
+    Validated under extreme load conditions using k6. The system maintains stable performance
+    even when processing thousands of concurrent banking transactions.
+  </p>
+
+  <div class="stress-metrics">
+    {stressTestMetrics.map(metric => (
+      <div class="stress-metric">
+        <span class="metric-value">{metric.value}</span>
+        <span class="metric-label">{metric.label}</span>
+      </div>
+    ))}
+  </div>
+
+  <div class="stress-links">
+    <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml" class="stress-link" target="_blank" rel="noopener noreferrer">
+      <span>📊</span> View CI/CD Stress Tests
+    </a>
+    <a href="./docs/" class="stress-link">
+      <span>📖</span> Documentation
+    </a>
+  </div>
+
+  <div class="reports-section">
+    <h4>📈 Historical Reports</h4>
+    <div class="reports-grid">
+      {recentReports.map(report => (
+        <a href={`./reports/${report.file}`} class="report-link">
+          <span class="report-date">{report.date}</span>
+          <span class="report-time">{report.time}</span>
+        </a>
+      ))}
+    </div>
+    <p class="reports-note">{allReports.length} stress test runs archived • <a href="./reports/">View all reports →</a></p>
+  </div>
+</section>
