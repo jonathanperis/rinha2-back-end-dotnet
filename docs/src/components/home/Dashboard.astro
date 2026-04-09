@@ -7,26 +7,10 @@ interface Stat {
   label: string;
 }
 
-interface ArchCard {
-  title: string;
-  description: string;
-}
-
 const stats: Stat[] = [
   { value: '47k+', label: 'Target Requests' },
-  { value: '1.5', label: 'Max CPU Limit' },
-  { value: '550MB', label: 'Max RAM Limit' }
-];
-
-const archCards: ArchCard[] = [
-  {
-    title: 'Architecture',
-    description: '2x API Instances, 1x Nginx LB, 1x Postgres Database.'
-  },
-  {
-    title: 'The Challenge',
-    description: 'Build a fictional bank API handling concurrent transactions with high throughput and data consistency.'
-  }
+  { value: '< 1.5', label: 'CPU Cores Used' },
+  { value: '< 550', label: 'MB Memory Allocated' }
 ];
 
 const stressTestMetrics = [
@@ -57,25 +41,25 @@ const recentReports = allReports.slice(0, 8).map(file => ({
 }));
 ---
 
-<section class="dashboard">
-  <div class="stats-grid">
-    {stats.map(stat => (
-      <div class="stat-item">
-        <h3>{stat.value}</h3>
-        <p>{stat.label}</p>
-      </div>
-    ))}
-  </div>
-
-  <div class="arch-info">
-    {archCards.map(card => (
-      <div class="arch-card">
-        <h4>{card.title}</h4>
-        <p>{card.description}</p>
-      </div>
-    ))}
-  </div>
+<section class="constraints">
+  <h2>System Constraints // Parameters</h2>
+  <ul class="constraint-list">
+    <li>2 API Instances</li>
+    <li>1 Nginx Load Balancer</li>
+    <li>1 Postgres Database</li>
+    <li>Max 1.5 CPU Total</li>
+    <li>Max 550MB RAM Total</li>
+  </ul>
 </section>
+
+<div class="stats-grid">
+  {stats.map(stat => (
+    <div class="stat-card">
+      <div class="stat-value">{stat.value}</div>
+      <div class="stat-label">{stat.label}</div>
+    </div>
+  ))}
+</div>
 
 <section class="stress-tests">
   <h3>⚡ Stress Test Results</h3>
