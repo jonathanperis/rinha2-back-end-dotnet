@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jonathanperis.github.io/rinha2-back-end-dotnet/sitemap-index.xml

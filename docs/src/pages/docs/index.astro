@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DocPageIsland from '@/components/docs/DocPageIsland';
+import HomeSection from '@/components/docs/sections/HomeSection.astro';
+import ArchitectureSection from '@/components/docs/sections/ArchitectureSection.astro';
+import ChallengeSection from '@/components/docs/sections/ChallengeSection.astro';
+import CiCdSection from '@/components/docs/sections/CiCdSection.astro';
+import GettingStartedSection from '@/components/docs/sections/GettingStartedSection.astro';
+import PerformanceSection from '@/components/docs/sections/PerformanceSection.astro';
+
+const title = 'rinha2-back-end-dotnet | Documentation';
+const description = 'Documentation for the .NET 9 Native AOT implementation of the Rinha de Backend 2024/Q1 challenge. Architecture, getting started, CI/CD pipeline, and performance results.';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="docs-layout">
+    <!-- Interactive island: sidebar + search + scrollspy (sidebar only, no content wrapping) -->
+    <DocPageIsland client:load />
+
+    <!-- Static content: all doc sections rendered as plain Astro HTML -->
+    <div class="content-wrapper">
+      <main class="content" id="mainContent">
+        <HomeSection />
+        <ArchitectureSection />
+        <ChallengeSection />
+        <CiCdSection />
+        <GettingStartedSection />
+        <PerformanceSection />
+      </main>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,27 @@
+{
+  "name": "rinha2-back-end-dotnet-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4",
+    "@astrojs/sitemap": "^3",
+    "astro": "^5",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "tailwindcss": "^4",
+    "typescript": "^6"
+  }
+}

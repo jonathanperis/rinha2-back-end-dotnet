@@ -409,3 +409,4 @@ FodyWeavers.xsd
 # Docs generation
 wiki/
 package-lock.json
+!docs/package-lock.json

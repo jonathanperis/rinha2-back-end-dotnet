@@ -1,0 +1,40 @@
+---
+---
+
+<section id="ci-cd-pipeline" class="doc-section">
+  <h1 class="page-title">CI/CD Pipeline</h1>
+
+  <h2>Workflows</h2>
+  <p>This repository uses four GitHub Actions workflows:</p>
+
+  <h3>build-check.yml</h3>
+  <ul>
+    <li><strong>Trigger:</strong> Pull requests to main, push to main</li>
+    <li><strong>Steps:</strong> Builds the API (Release, AOT=true) and runs a Docker health check to verify the service starts correctly</li>
+    <li><strong>Purpose:</strong> Catch build failures and regressions before merging</li>
+  </ul>
+
+  <h3>main-release.yml</h3>
+  <ul>
+    <li><strong>Trigger:</strong> Push to main branch</li>
+    <li><strong>Steps:</strong> Builds a multi-platform Docker image (amd64, arm64/v8), pushes it to GitHub Container Registry (GHCR), and runs k6 load tests</li>
+    <li><strong>Purpose:</strong> Automated release of production-ready container images with stress test validation</li>
+  </ul>
+
+  <h3>codeql.yml</h3>
+  <ul>
+    <li><strong>Trigger:</strong> Pull requests to main, push to main, weekly schedule</li>
+    <li><strong>Steps:</strong> Runs GitHub CodeQL security analysis for C#</li>
+    <li><strong>Purpose:</strong> Automated security vulnerability detection</li>
+  </ul>
+
+  <h3>deploy.yml</h3>
+  <ul>
+    <li><strong>Trigger:</strong> Push to main branch</li>
+    <li><strong>Steps:</strong> Installs dependencies, builds the Astro site in <code>docs/</code>, and deploys the output to GitHub Pages</li>
+    <li><strong>Purpose:</strong> Publish project documentation and stress test reports to GitHub Pages</li>
+  </ul>
+
+  <h2>Docker Image</h2>
+  <p>Published to <code>ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest</code> (amd64, arm64/v8)</p>
+</section>

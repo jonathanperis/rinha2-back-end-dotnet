@@ -1,0 +1,79 @@
+---
+---
+
+<section id="architecture" class="doc-section">
+  <h1 class="page-title">Architecture</h1>
+
+  <h2>Overview</h2>
+  <p>The system follows a shared architecture across all Rinha de Backend implementations: two API instances behind an Nginx reverse proxy, with a single PostgreSQL database and an observability stack.</p>
+
+  <h2>Services</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Role</th>
+        <th>CPU</th>
+        <th>RAM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>webapi1</td>
+        <td>.NET 9 Native AOT API instance</td>
+        <td>0.4</td>
+        <td>100MB</td>
+      </tr>
+      <tr>
+        <td>webapi2</td>
+        <td>.NET 9 Native AOT API instance</td>
+        <td>0.4</td>
+        <td>100MB</td>
+      </tr>
+      <tr>
+        <td>nginx</td>
+        <td>Reverse proxy / load balancer (least-conn)</td>
+        <td>0.2</td>
+        <td>20MB</td>
+      </tr>
+      <tr>
+        <td>postgresql</td>
+        <td>Database with stored procedures</td>
+        <td>0.5</td>
+        <td>330MB</td>
+      </tr>
+      <tr>
+        <td>k6</td>
+        <td>Load testing</td>
+        <td>(not counted)</td>
+        <td>(not counted)</td>
+      </tr>
+      <tr>
+        <td>grafana + influxdb</td>
+        <td>Observability dashboards</td>
+        <td>(not counted)</td>
+        <td>(not counted)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Load Balancing</h2>
+  <p>Nginx uses <code>least_conn</code> strategy to distribute requests across the two API instances.</p>
+
+  <h2>Database</h2>
+  <p>Business logic is implemented in PostgreSQL stored procedures. The database is tuned for maximum write performance:</p>
+  <ul>
+    <li><code>synchronous_commit=0</code> — no wait for WAL flush</li>
+    <li><code>fsync=0</code> — skip fsync on writes</li>
+    <li><code>full_page_writes=0</code> — skip full page writes</li>
+  </ul>
+
+  <h2>Implementation Details</h2>
+  <ul>
+    <li>Native AOT compilation for zero-JIT startup and minimal memory footprint</li>
+    <li>System.Text.Json source generators for reflection-free JSON serialization</li>
+    <li>Npgsql 10.0.2 with connection pooling and multiplexing for high-throughput database access</li>
+    <li>Conditional compilation to strip OpenTelemetry in production builds</li>
+    <li>Multi-stage Docker build for minimal container image size (amd64, arm64/v8)</li>
+  </ul>
+</section>

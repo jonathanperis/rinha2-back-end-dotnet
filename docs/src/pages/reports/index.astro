@@ -1,0 +1,194 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const reportsDir = path.join(process.cwd(), 'public/reports');
+const reports = fs.readdirSync(reportsDir)
+    .filter(f => f.endsWith('.html'))
+    .sort()
+    .reverse();
+
+function parseReportMeta(filename: string) {
+    const match = filename.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
+    if (!match) return { date: filename, time: '', datetime: '' };
+    const [, year, month, day, hour, minute, second] = match;
+    return {
+        date: `${year}-${month}-${day}`,
+        time: `${hour}:${minute}:${second}`,
+        datetime: `${year}-${month}-${day}T${hour}:${minute}:${second}`,
+    };
+}
+---
+
+<BaseLayout
+    title="rinha2-back-end-dotnet | Stress Test Reports"
+    description="All k6 stress test reports for the rinha2-back-end-dotnet .NET 9 banking API."
+>
+    <div class="reports-page">
+        <nav class="reports-nav">
+            <a href="../" class="logo">SYS.DOTNET.09</a>
+            <div class="nav-links">
+                <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet">GitHub</a>
+                <a href="../docs/">Docs</a>
+            </div>
+        </nav>
+
+        <main class="reports-main">
+            <header class="reports-header">
+                <h1>Stress Test Reports</h1>
+                <p>{reports.length} runs archived — k6 load tests executed on every push to <code>main</code></p>
+            </header>
+
+            <div class="reports-list">
+                {reports.map((file) => {
+                    const { date, time, datetime } = parseReportMeta(file);
+                    return (
+                        <a href={`./${file}`} class="report-entry">
+                            <span class="report-entry-date">{date}</span>
+                            <span class="report-entry-time">{time}</span>
+                            <span class="report-entry-file">{file}</span>
+                            <span class="report-entry-arrow">→</span>
+                        </a>
+                    );
+                })}
+            </div>
+        </main>
+    </div>
+</BaseLayout>
+
+<style>
+    .reports-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reports-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 2px solid var(--rust-dark);
+        background: rgba(10, 22, 40, 0.8);
+        backdrop-filter: blur(20px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .reports-main {
+        max-width: 860px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 3rem 2rem;
+    }
+
+    .reports-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .reports-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    .reports-header p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .reports-header code {
+        background: rgba(10, 22, 40, 0.8);
+        border: 1px solid var(--rust-dark);
+        color: var(--rust-bright);
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 0.85rem;
+    }
+
+    .reports-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .report-entry {
+        display: grid;
+        grid-template-columns: 110px 90px 1fr auto;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 0.875rem 1.25rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(30, 144, 255, 0.08);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .report-entry:hover {
+        background: rgba(30, 144, 255, 0.05);
+        border-color: rgba(30, 144, 255, 0.2);
+        transform: translateX(4px);
+    }
+
+    .report-entry-date {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.875rem;
+        color: #00d4ff;
+        font-weight: 500;
+    }
+
+    .report-entry-time {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .report-entry-file {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        opacity: 0.6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .report-entry-arrow {
+        color: var(--rust-orange);
+        font-size: 1rem;
+        transition: transform 0.2s;
+    }
+
+    .report-entry:hover .report-entry-arrow {
+        transform: translateX(4px);
+    }
+
+    @media (max-width: 640px) {
+        .report-entry {
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto;
+        }
+
+        .report-entry-date {
+            grid-column: 1;
+        }
+
+        .report-entry-arrow {
+            grid-column: 2;
+            grid-row: 1 / 3;
+        }
+
+        .report-entry-time {
+            grid-column: 1;
+        }
+
+        .report-entry-file {
+            display: none;
+        }
+    }
+</style>
