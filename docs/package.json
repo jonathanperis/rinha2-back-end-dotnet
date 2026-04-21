@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/react": "^4",
     "@astrojs/sitemap": "^3",
-    "astro": "^5",
+    "astro": "^6",
     "react": "^19",
     "react-dom": "^19"
   },
