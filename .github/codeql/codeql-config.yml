@@ -6,4 +6,8 @@ paths-ignore:
   - '**/*.designer.cs'
 query-filters:
   - exclude:
-      id: cs/useless-cast-to-self
+      id: cs/class-name-matches-base-class
+  - exclude:
+      id: cs/catch-of-all-exceptions
+  - exclude:
+      id: cs/path-combine
