@@ -40,7 +40,8 @@ const sectionsToRender = isRoot
     })();
 
 export function getStaticPaths() {
-  const order = ['home', 'architecture', 'challenge', 'ci-cd-pipeline', 'getting-started', 'performance'];
+  // SECTION_CATEGORIES.flatMap(({ ids }) => ids) — duplicated due to Astro hoisting
+  const order = ['home', 'challenge', 'architecture', 'getting-started', 'performance', 'ci-cd-pipeline'];
   return [
     { params: { slug: undefined } },
     ...order.filter(s => s !== 'home').map(slug => ({ params: { slug } })),
@@ -184,7 +185,10 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
 
             if (query === '') {
               sections.forEach(s => s.classList.remove('hidden-section'));
-              navItems.forEach(item => item.parentElement.style.display = '');
+              navItems.forEach(item => {
+                item.style.display = '';
+                item.parentElement.style.display = '';
+              });
               document.querySelectorAll('.sidebar-category-group').forEach(group => {
                 group.style.display = '';
                 const catLabel = group.querySelector('.sidebar-category');
