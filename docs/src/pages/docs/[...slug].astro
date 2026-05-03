@@ -8,6 +8,8 @@ const SECTION_CATEGORIES = [
   { label: 'Develop', ids: ['getting-started', 'performance', 'ci-cd-pipeline'] },
 ];
 
+const SECTION_ORDER = SECTION_CATEGORIES.flatMap(({ ids }) => ids);
+
 const SLUG_LABEL: Record<string, string> = {
   home: 'Home',
   architecture: 'Architecture',
@@ -53,11 +55,9 @@ const sectionsToRender = isRoot
     })();
 
 export function getStaticPaths() {
-  // SECTION_CATEGORIES.flatMap(({ ids }) => ids) — duplicated due to Astro hoisting
-  const order = ['home', 'challenge', 'architecture', 'getting-started', 'performance', 'ci-cd-pipeline'];
   return [
     { params: { slug: undefined } },
-    ...order.filter(s => s !== 'home').map(slug => ({ params: { slug } })),
+    ...SECTION_ORDER.filter(s => s !== 'home').map(slug => ({ params: { slug } })),
   ];
 }
 
