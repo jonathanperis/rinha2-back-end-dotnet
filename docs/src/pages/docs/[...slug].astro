@@ -25,6 +25,19 @@ for (const [path, module] of Object.entries(globResult)) {
   pagesBySlug[fileName] = module;
 }
 
+// Build-time assertion: validate SECTION_CATEGORIES IDs against discovered slugs
+const availableSlugs = new Set(Object.keys(pagesBySlug));
+for (const cat of SECTION_CATEGORIES) {
+  for (const id of cat.ids) {
+    if (!availableSlugs.has(id)) {
+      const catName = cat.label || "root";
+      throw new Error(
+        `SECTION_CATEGORIES references id "${id}" (category: "${catName}") but no matching wiki/${id}.md was found. Available slugs: ${Array.from(availableSlugs).join(", ")}`
+      );
+    }
+  }
+}
+
 const requestedSlug = Astro.params.slug;
 const isRoot = requestedSlug === undefined;
 const requestedKey = requestedSlug ?? 'home';
