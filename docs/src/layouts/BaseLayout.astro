@@ -12,12 +12,14 @@ const {
   description = 'High-performance banking API for the Rinha de Backend challenge. Built with .NET 9 Native AOT, ASP.NET Minimal APIs, and Npgsql multiplexing. Handles concurrent transactions under strict resource constraints (1.5 CPU, 550MB RAM).'
 } = Astro.props;
 
+const pageUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `https://jonathanperis.github.io${Astro.url.pathname}`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareSourceCode',
   'name': 'Rinha de Backend — .NET',
   'description': description,
-  'url': 'https://jonathanperis.github.io/rinha2-back-end-dotnet/',
+  'url': pageUrl,
   'codeRepository': 'https://github.com/jonathanperis/rinha2-back-end-dotnet',
   'programmingLanguage': 'C#',
   'runtimePlatform': '.NET 9',
@@ -37,17 +39,17 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <meta name="description" content={description} />
     <meta name="keywords" content=".NET 9, C#, ASP.NET, Native AOT, Npgsql, PostgreSQL, banking API, Rinha de Backend, performance, load testing" />
-    <link rel="canonical" href="https://jonathanperis.github.io/rinha2-back-end-dotnet/" />
+    <link rel="canonical" href={pageUrl} />
     <meta name="theme-color" content="#1e90ff" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content="https://jonathanperis.github.io/rinha2-back-end-dotnet/" />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:site_name" content="rinha2-back-end-dotnet" />
     <meta property="og:locale" content="en_US" />
 

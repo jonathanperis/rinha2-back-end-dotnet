@@ -10,16 +10,11 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@astrojs/react": "^4",
     "@astrojs/sitemap": "^3",
-    "astro": "^6",
-    "react": "^19",
-    "react-dom": "^19"
+    "astro": "^6"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
     "tailwindcss": "^4",
     "typescript": "^6"
