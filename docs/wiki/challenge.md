@@ -23,4 +23,4 @@ The challenge imposes strict resource limits across all containers combined:
 
 ## Source
 
-Full specification: [github.com/zanfranceschi/rinha-de-backend-2024-q1L(https://github.com/zanfranceschi/rinha-de-backend-2024-q1.md)
+Full specification: [github.com/zanfranceschi/rinha-de-backend-2024-q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)

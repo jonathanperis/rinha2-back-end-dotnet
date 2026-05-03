@@ -19,4 +19,4 @@ The challenge allows a total of 1.5 CPU and 550MB RAM across all containers.
 
 ## Stress Testing
 
-Load tests are run using the shared [rinha2-back-end-k6L(https://github.com/jonathanperis/rinha2-back-end-k6.md) test suite, which simulates concurrent users performing debits, credits, validations, and statement queries.
+Load tests are run using the shared [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) test suite, which simulates concurrent users performing debits, credits, validations, and statement queries.
