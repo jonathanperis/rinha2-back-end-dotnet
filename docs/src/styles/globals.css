@@ -959,7 +959,7 @@ footer a:hover {
   margin: 24px 0;
 }
 
-.docs-layout .doc-section pre code {
+.docs-layout .doc-section pre > code {
   background: transparent;
   padding: 0;
   border-radius: 0;
@@ -967,7 +967,7 @@ footer a:hover {
   font-size: 13px;
 }
 
-.docs-layout .doc-section code {
+.docs-layout .doc-section :not(pre) > code {
   background: var(--code-bg);
   color: var(--code-text);
   border-radius: 4px;
