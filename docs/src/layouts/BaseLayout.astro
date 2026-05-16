@@ -36,10 +36,10 @@ const jsonLd = {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <meta name="description" content={description} />
     <meta name="keywords" content=".NET 9, C#, ASP.NET, Native AOT, Npgsql, PostgreSQL, banking API, Rinha de Backend, performance, load testing" />
     <link rel="canonical" href={pageUrl} />
@@ -77,6 +77,7 @@ const jsonLd = {
 
     <div class="glow"></div>
 
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
     <slot />
   </body>
 </html>
