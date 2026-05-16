@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-16T22:26:26Z",
+  "title": "Design System: rinha2-back-end-dotnet",
+  "extensions": {
+    "colorMeta": {
+      "deep-navy": {
+        "role": "neutral",
+        "displayName": "Deep Navy",
+        "canonical": "#0a1628",
+        "tonalRamp": ["oklch(14% 0.03 255)", "oklch(20% 0.04 255)", "oklch(28% 0.05 255)", "oklch(38% 0.055 255)", "oklch(50% 0.05 255)", "oklch(65% 0.04 255)", "oklch(80% 0.025 255)", "oklch(94% 0.012 255)"]
+      },
+      "dotnet-blue": {
+        "role": "primary",
+        "displayName": "Dotnet Blue",
+        "canonical": "#1e90ff",
+        "tonalRamp": ["oklch(20% 0.06 255)", "oklch(30% 0.09 255)", "oklch(42% 0.13 255)", "oklch(55% 0.17 255)", "oklch(68% 0.16 255)", "oklch(78% 0.12 255)", "oklch(88% 0.07 255)", "oklch(96% 0.025 255)"]
+      },
+      "telemetry-cyan": {
+        "role": "primary",
+        "displayName": "Telemetry Cyan",
+        "canonical": "#00d4ff",
+        "tonalRamp": ["oklch(20% 0.05 220)", "oklch(32% 0.08 220)", "oklch(45% 0.11 220)", "oklch(60% 0.13 220)", "oklch(72% 0.12 220)", "oklch(82% 0.08 220)", "oklch(90% 0.05 220)", "oklch(97% 0.02 220)"]
+      },
+      "native-aot-purple": {
+        "role": "secondary",
+        "displayName": "Native AOT Purple",
+        "canonical": "#512BD4",
+        "tonalRamp": ["oklch(18% 0.06 295)", "oklch(28% 0.10 295)", "oklch(40% 0.15 295)", "oklch(52% 0.19 295)", "oklch(64% 0.16 295)", "oklch(76% 0.10 295)", "oklch(88% 0.06 295)", "oklch(96% 0.02 295)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline and one-off campaign statements."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Readable explanations and documentation prose."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code, labels, timestamps, config rows, and system metadata."
+      }
+    },
+    "shadows": [
+      {
+        "name": "cta-glow",
+        "value": "0 8px 30px rgba(0, 212, 255, 0.25)",
+        "purpose": "Primary button hover and active proof links."
+      },
+      {
+        "name": "proof-lift",
+        "value": "0 10px 30px rgba(0, 0, 0, 0.3)",
+        "purpose": "Hover state for key metric or report cards only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Default easing for entrance and interaction feedback."
+      },
+      {
+        "name": "state-fast",
+        "value": "160ms",
+        "purpose": "Fast hover, focus, and active-state transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "768px"
+      },
+      {
+        "name": "narrow",
+        "value": "480px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA for documentation and proof paths.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">VIEW DOCUMENTATION</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 16px 40px; border-radius: 12px; background: #1e90ff; color: #0a1628; font: 700 0.9rem/1 JetBrains Mono, Fira Code, ui-monospace, monospace; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; transition: transform 160ms cubic-bezier(0.25,1,0.5,1), box-shadow 160ms cubic-bezier(0.25,1,0.5,1), background 160ms; } .ds-btn-primary:hover { background: #00d4ff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.25); } .ds-btn-primary:focus-visible { outline: 2px solid #00d4ff; outline-offset: 3px; }"
+    },
+    {
+      "name": "Technical Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Compact technology or status label.",
+      "html": "<span class=\"ds-chip\">.NET 9</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; padding: 6px 14px; border: 1px solid #1a365d; border-radius: 8px; background: #0d2137; color: #00d4ff; font: 600 0.78rem/1 JetBrains Mono, Fira Code, ui-monospace, monospace; letter-spacing: 0.06em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Proof Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Metric surface for benchmark proof.",
+      "html": "<article class=\"ds-proof-card\"><strong>46k+</strong><span>requests/second</span></article>",
+      "css": ".ds-proof-card { padding: 32px; border: 1px solid #1a365d; border-radius: 20px; background: #0d2137; color: #e0f0ff; transition: transform 160ms cubic-bezier(0.25,1,0.5,1), border-color 160ms, box-shadow 160ms; } .ds-proof-card strong { display: block; color: #00d4ff; font: 700 2.5rem/1 Inter, system-ui, sans-serif; letter-spacing: -0.04em; margin-bottom: 8px; } .ds-proof-card span { color: #8ab4f8; font: 600 0.78rem/1.3 JetBrains Mono, Fira Code, ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; } .ds-proof-card:hover { transform: translateY(-3px); border-color: #1e90ff; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "Docs search or command-palette entry point.",
+      "html": "<label class=\"ds-search\"><span>Search</span><input placeholder=\"Search documentation...\" /><kbd>Ctrl K</kbd></label>",
+      "css": ".ds-search { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid #1a365d; border-radius: 8px; background: #0d2137; color: #8ab4f8; font: 500 0.8rem/1 JetBrains Mono, Fira Code, ui-monospace, monospace; } .ds-search input { min-width: 0; border: 0; outline: 0; background: transparent; color: #e0f0ff; font: inherit; } .ds-search:focus-within { border-color: #00d4ff; box-shadow: 0 0 0 2px rgba(0,212,255,0.18); } .ds-search kbd { padding: 2px 6px; border-radius: 4px; background: #0a1628; color: #8ab4f8; font: inherit; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Constrained Systems Console",
+    "overview": "The interface should feel like a serious benchmark control room: dark navy, bright telemetry accents, dense proof where density helps, and sharp whitespace where the visitor needs orientation. The brand is not generic dark mode. It is a public engineering console for a .NET implementation that survived tight CPU and memory limits.",
+    "keyCharacteristics": [
+      "Dark, high-confidence, system-native atmosphere.",
+      "Proof-first hierarchy for throughput, latency, success rate, resource limits, CI runs, and archived reports.",
+      "Console motifs used as information structure, not decoration.",
+      "Strong distinction between cinematic homepage sections and long-form readable docs."
+    ],
+    "rules": [
+      {
+        "name": "The Proof Accent Rule",
+        "body": "Blue and cyan are reserved for proof, actions, focus, and navigation state. If everything glows, nothing is evidence.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Has a Job Rule",
+        "body": "Monospace is for code, labels, timestamps, config rows, and system metadata. It is not the default voice for every paragraph.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Until Proven Rule",
+        "body": "A surface stays flat until it is clickable, active, or carrying a top-tier proof point.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the current dark .NET/system aesthetic: navy grid, cyan telemetry, restrained purple, and technical labels.",
+      "Do use proof-first hierarchy. Bring benchmark outcomes, resource limits, CI evidence, and archived reports closer to the top.",
+      "Do add visible :focus-visible styles to every interactive pattern.",
+      "Do respect prefers-reduced-motion for particles, ambient drift, entrance animations, smooth scrolling, and hover transitions."
+    ],
+    "donts": [
+      "Don't use gradient text.",
+      "Don't use thick border-left or border-right accent stripes on cards, callouts, or blockquotes.",
+      "Don't use pure black (#000) or pure white (#fff) as surface or text defaults.",
+      "Don't turn the site into terminal cosplay.",
+      "Don't repeat identical dark cards for every section."
+    ]
+  }
+}
