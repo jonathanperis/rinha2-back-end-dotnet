@@ -12,6 +12,15 @@ const SLUG_LABEL: Record<string, string> = {
   performance: 'Performance',
 };
 
+const SECTION_SUMMARIES: Record<string, { eyebrow: string; description: string; signal: string }> = {
+  home: { eyebrow: 'Index', description: 'Operator overview, proof points, and shortest path into the repo.', signal: 'start here' },
+  challenge: { eyebrow: 'Spec', description: 'Rules, endpoints, validation behavior, and resource envelope.', signal: '1.5 CPU / 550MB' },
+  architecture: { eyebrow: 'Runtime', description: 'NGINX, two Native AOT API containers, PostgreSQL stored procedures, and telemetry.', signal: 'API x2 + PostgreSQL' },
+  'getting-started': { eyebrow: 'Runbook', description: 'Clone, boot the compose stack, smoke `/healthz`, and issue sample requests.', signal: 'copy-ready' },
+  performance: { eyebrow: 'Evidence', description: 'Budget split, latency choices, k6 lane, and release validation links.', signal: 'AOT + k6' },
+  'ci-cd-pipeline': { eyebrow: 'Release', description: 'PR gates, GHCR publishing, CodeQL, and Pages deploy workflow.', signal: 'linear main' },
+};
+
 const globResult = import.meta.glob('../../../wiki/*.md', { eager: true });
 
 const pagesBySlug: Record<string, any> = {};
@@ -58,6 +67,9 @@ const pageTitle = isRoot ? 'rinha2-back-end-dotnet - Documentation' : `${SLUG_LA
 const base = import.meta.env.BASE_URL;
 const docsBase = base.replace(/\/$/, '') + '/docs';
 const backHomeUrl = base.replace(/\/$/, '') + '/';
+const currentSlug = isRoot ? 'home' : requestedKey;
+const docsHomeUrl = `${docsBase}/`;
+const sectionCards = SECTION_ORDER.map(id => ({ id, label: SLUG_LABEL[id], ...SECTION_SUMMARIES[id] }));
 ---
 
 <BaseLayout title={pageTitle}>
@@ -76,8 +88,8 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
     <div class="sidebar-header">
       <h1 class="repo-title">rinha2-back-end-dotnet</h1>
       <p class="repo-description">
-        .NET 9 Native AOT implementation of Rinha de Backend 2024/Q1 — fictional bank API
-        for performance under constraints
+        .NET 9 Native AOT implementation of Rinha de Backend 2024/Q1, a fictional bank API
+        tuned for performance under strict constraints
       </p>
       <label class="search-label" for="searchInput" hidden={!isRoot}>Command search</label>
       <input type="search" id="searchInput" class="search-box" placeholder="Search docs by keyword..." aria-label="Search documentation" autocomplete="off" hidden={!isRoot}>
@@ -92,8 +104,14 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
             <ul>
               {catIds.map((id) => (
                 <li>
-                  <a class="nav-item" href={`${docsBase}/#${id}`} data-nav-id={id}>
-                    {SLUG_LABEL[id]}
+                  <a
+                    class="nav-item"
+                    href={id === 'home' ? docsHomeUrl : `${docsBase}/${id}/`}
+                    data-nav-id={id}
+                    aria-current={currentSlug === id ? 'page' : undefined}
+                  >
+                    <span>{SLUG_LABEL[id]}</span>
+                    {SECTION_SUMMARIES[id]?.signal && <small>{SECTION_SUMMARIES[id].signal}</small>}
                   </a>
                 </li>
               ))}
@@ -111,6 +129,30 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
 
   <div class="content-wrapper">
     <main class="content" id="mainContent">
+      {isRoot && (
+        <section class="docs-overview" aria-labelledby="docs-overview-title">
+          <div class="overview-copy">
+            <p class="eyebrow">Documentation control surface</p>
+            <h1 id="docs-overview-title">From contest rules to deploy evidence, without leaving the docs.</h1>
+            <p>Use this page as the operator map, then open focused pages when you need implementation detail, commands, or release proof.</p>
+          </div>
+          <div class="proof-console" aria-label="Runtime proof summary">
+            <div><span>budget</span><strong>1.5 CPU / 550MB</strong></div>
+            <div><span>runtime</span><strong>.NET 9 Native AOT</strong></div>
+            <div><span>entrypoint</span><strong>NGINX :9999</strong></div>
+            <div><span>release</span><strong>GHCR + Pages</strong></div>
+          </div>
+          <div class="section-card-grid">
+            {sectionCards.filter(card => card.id !== 'home').map(card => (
+              <a class="section-card" href={`${docsBase}/${card.id}/`}>
+                <span>{card.eyebrow}</span>
+                <strong>{card.label}</strong>
+                <p>{card.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
       {sectionsToRender.map(({ slug, page: wikiPage }) => {
         const Content = wikiPage.default ?? wikiPage;
         return (
@@ -178,13 +220,13 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
 
       // Build a local heading table of contents from rendered Markdown.
       const localTocNav = document.getElementById('localTocNav');
-      const headingNodes = Array.from(document.querySelectorAll('.content h2, .content h3'))
-        .filter(h => h.id && h.textContent?.trim());
+      const headingNodes = Array.from(document.querySelectorAll('.content h1, .content h2, .content h3'))
+        .filter(h => h.id && h.textContent?.trim() && h.id !== 'docs-overview-title');
       if (localTocNav && headingNodes.length > 0) {
         const list = document.createElement('ol');
-        headingNodes.slice(0, 18).forEach(heading => {
+        headingNodes.forEach(heading => {
           const item = document.createElement('li');
-          item.className = heading.tagName === 'H3' ? 'toc-nested' : '';
+          item.className = heading.tagName === 'H1' ? 'toc-major' : heading.tagName === 'H3' ? 'toc-nested' : '';
           const link = document.createElement('a');
           link.href = `#${heading.id}`;
           link.textContent = heading.textContent.trim();
