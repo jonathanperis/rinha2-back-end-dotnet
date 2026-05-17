@@ -29,10 +29,10 @@ After a PR is rebased into `main`, the release workflow publishes the runtime im
 
 | Job | Purpose |
 |-----|---------|
-| `setup-build-test` | Restore and build the WebApi project |
+| `setup-build-test` | Restore and build the `net9.0` WebApi project with release/AOT flags |
 | `build-push-amd64` | Build and push `linux/amd64` image to GHCR |
 | `container-test` | Start the production compose stack and check `/healthz` |
-| `load-test` | Run the k6 validation lane |
+| `load-test` | Run the k6 validation lane and upload the HTML stress-test report artifact |
 | `build-push-arm64` | Build and push `linux/arm64/v8` image |
 | `merge-manifest` | Publish the multi-arch `latest` manifest |
 
@@ -47,7 +47,7 @@ After a PR is rebased into `main`, the release workflow publishes the runtime im
 
 ## Documentation deploy
 
-The Pages workflow delegates to Jonathan's shared GitHub Pages workflow and uses Bun as the package manager. The docs package is an Astro static site under `docs/`, with production routes served under the `/rinha2-back-end-dotnet` base path.
+The Pages workflow delegates to Jonathan's shared GitHub Pages workflow and uses Bun as the package manager. The docs package is an Astro static site under `docs/`; Markdown content lives in `docs/wiki/`, and production routes are served under the `/rinha2-back-end-dotnet` base path.
 
 ## Operational notes
 

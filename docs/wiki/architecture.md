@@ -9,7 +9,7 @@ client / k6
   -> nginx:9999 (least_conn)
     -> webapi1-dotnet:8080
     -> webapi2-dotnet:8080
-      -> PostgreSQL 16 (stored procedures)
+      -> PostgreSQL (stored procedures)
 ```
 
 ## Counted services
@@ -19,7 +19,7 @@ client / k6
 | `webapi1-dotnet` | .NET 9 Native AOT API instance | 0.4 | 100MB | ASP.NET Core Minimal API |
 | `webapi2-dotnet` | .NET 9 Native AOT API instance | 0.4 | 100MB | Same image and config as instance 1 |
 | `nginx` | Reverse proxy and load balancer | 0.2 | 20MB | Uses `least_conn` balancing |
-| `db` | PostgreSQL 16 database | 0.5 | 330MB | Stores schema, limits, balances, transactions |
+| `db` | PostgreSQL database (`postgres:16` in dev compose) | 0.5 | 330MB | Stores schema, limits, balances, transactions |
 | **Total** | Counted challenge budget | **1.5** | **550MB** | Matches the contest envelope |
 
 ## Support services
@@ -32,7 +32,7 @@ client / k6
 
 ## API layer
 
-The API is intentionally thin:
+The API project targets `net9.0`; its Dockerfile currently builds and runs it with Microsoft .NET `10.0` SDK/runtime images. The API is intentionally thin:
 
 - `CreateSlimBuilder` trims default ASP.NET Core hosting overhead.
 - Route handlers map directly to the required contest endpoints.
@@ -73,7 +73,7 @@ That shape keeps database concurrency explicit, avoids unbounded connection grow
 
 | Build flag | Default in release workflow | Effect |
 |------------|-----------------------------|--------|
-| `AOT` | `true` | Publishes Native AOT binaries |
+| `AOT` | `true` | Publishes Native AOT binaries for the release image |
 | `TRIM` | `false` | Leaves trimming separate from AOT path |
 | `EXTRA_OPTIMIZE` | `true` | Removes observability/runtime support guarded by `EXTRAOPTIMIZE` |
 | `BUILD_CONFIGURATION` | `Release` | Uses optimized .NET build configuration |

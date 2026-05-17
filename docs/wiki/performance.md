@@ -47,10 +47,10 @@ The development compose file keeps telemetry separate from the counted service b
 
 The `Main Release` workflow validates more than a build:
 
-1. Restores and builds the WebApi project with `AOT=true` and `EXTRA_OPTIMIZE=true`.
+1. Restores and builds the WebApi project with `AOT=true`, `TRIM=false`, and `EXTRA_OPTIMIZE=true`.
 2. Builds and pushes the amd64 image to GHCR.
 3. Starts the production compose stack and checks `/healthz`.
-4. Runs the load-test job.
+4. Runs the load-test job and uploads the HTML stress-test report artifact.
 5. Builds and pushes the arm64 image.
 6. Merges the platform images into the `latest` manifest.
 
