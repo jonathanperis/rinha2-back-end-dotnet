@@ -47,7 +47,7 @@ After a PR is rebased into `main`, the release workflow publishes the runtime im
 
 ## Documentation deploy
 
-The Pages workflow delegates to the shared `jonathanperis/.github` Pages workflow and uses Bun as the package manager. The docs package is an Astro static site under `docs/`, with production routes served under the `/rinha2-back-end-dotnet` base path.
+The Pages workflow delegates to Jonathan's shared GitHub Pages workflow and uses Bun as the package manager. The docs package is an Astro static site under `docs/`, with production routes served under the `/rinha2-back-end-dotnet` base path.
 
 ## Operational notes
 
