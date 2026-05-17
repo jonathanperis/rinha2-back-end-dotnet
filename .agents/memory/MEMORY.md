@@ -1,0 +1,5 @@
+- [Architecture](architecture.md) — Native AOT, source-generated JSON, conditional OpenTelemetry, Npgsql multiplexing, build flag matrix.
+- [Workflow](workflow.md) — Branch+PR strategy required; PRs are rebase-only.
+- [GitHub Conventions](github.md) — Repo-wide community health files live in `jonathanperis/.github`; use `gh` CLI.
+- [User Profile](user_profile.md) — Maintainer context for sibling Rinha implementations and shared infrastructure patterns.
+- [GitHub Pages & Docs](github_pages.md) — Astro docs site, documentation source, deploy workflow, GHCR image, stress-test reports.
