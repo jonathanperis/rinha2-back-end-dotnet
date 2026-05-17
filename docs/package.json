@@ -14,9 +14,11 @@
     "astro": "^6"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4",
     "eslint": "^9",
     "tailwindcss": "^4",
-    "typescript": "^6"
+    "typescript": "^6",
+    "typescript-eslint": "^8.59.3"
   }
 }
