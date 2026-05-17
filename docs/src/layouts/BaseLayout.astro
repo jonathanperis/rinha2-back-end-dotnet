@@ -15,6 +15,10 @@ const {
 const pageUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : `https://jonathanperis.github.io${Astro.url.pathname}`;
 const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const faviconUrl = `${baseUrl}favicon.ico`;
+const faviconPngUrl = `${baseUrl}favicon.png`;
+const favicon32Url = `${baseUrl}favicon-32x32.png`;
+const appleTouchIconUrl = `${baseUrl}apple-touch-icon.png`;
+const socialPreviewUrl = Astro.site ? new URL(`${baseUrl}social-preview.png`, Astro.site).href : `https://jonathanperis.github.io${baseUrl}social-preview.png`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -22,6 +26,7 @@ const jsonLd = {
   'name': 'Rinha de Backend — .NET',
   'description': description,
   'url': pageUrl,
+  'image': socialPreviewUrl,
   'codeRepository': 'https://github.com/jonathanperis/rinha2-back-end-dotnet',
   'programmingLanguage': 'C#',
   'runtimePlatform': '.NET 9',
@@ -44,6 +49,9 @@ const jsonLd = {
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <meta name="description" content={description} />
     <link rel="icon" href={faviconUrl} sizes="any" />
+    <link rel="icon" type="image/png" href={faviconPngUrl} />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
+    <link rel="apple-touch-icon" href={appleTouchIconUrl} />
     <meta name="keywords" content=".NET 9, C#, ASP.NET, Native AOT, Npgsql, PostgreSQL, banking API, Rinha de Backend, performance, load testing" />
     <link rel="canonical" href={pageUrl} />
     <meta name="theme-color" content="#1e90ff" />
@@ -55,11 +63,19 @@ const jsonLd = {
     <meta property="og:url" content={pageUrl} />
     <meta property="og:site_name" content="rinha2-back-end-dotnet" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={socialPreviewUrl} />
+    <meta property="og:image:secure_url" content={socialPreviewUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dark .NET topology card for rinha2-back-end-dotnet with console chevron, cyan grid, and purple nodes." />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialPreviewUrl} />
+    <meta name="twitter:image:alt" content="Dark .NET topology card for rinha2-back-end-dotnet with console chevron, cyan grid, and purple nodes." />
     <meta name="twitter:creator" content="@jperis_silva" />
 
     <!-- JSON-LD Structured Data -->
