@@ -4,7 +4,7 @@
 
 - Docker with Docker Compose.
 - Git.
-- Optional: .NET 9 SDK if you want to build `src/WebApi` outside Docker.
+- Optional: .NET 9 SDK if you want to build `src/WebApi` outside Docker. Docker builds use the repository Dockerfile's .NET 10 SDK/runtime images while the project itself targets `net9.0`.
 
 ## Clone and run
 

@@ -17,9 +17,9 @@ Rinha de Backend is a Brazilian backend challenge focused on constrained, concur
 - Only client IDs `1` through `5` exist.
 - Transaction type must be debit (`d`) or credit (`c`).
 - Transaction value must be an integer amount.
-- Description must be present and short enough for the contest schema.
+- Description must be present and at most 10 characters, matching the current API validation and database function signature.
 - Debits cannot push the account beyond the configured credit limit.
-- Statement responses return the current balance plus the latest transactions.
+- Statement responses return the current balance plus the latest 10 transactions.
 
 ## Resource envelope
 

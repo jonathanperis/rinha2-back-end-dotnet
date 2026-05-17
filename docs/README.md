@@ -1,6 +1,6 @@
 # Docs
 
-Astro static site deployed to GitHub Pages.
+Astro static site deployed to GitHub Pages. The Markdown pages under `docs/wiki/` are the source for the public documentation/wiki-style routes.
 
 ## Commands
 
@@ -10,7 +10,7 @@ Run from this directory (`docs/`):
 |---|---|
 | `bun install` | Install dependencies |
 | `bun run dev` | Start dev server |
-| `bun run build` | Build to `./out/` |
+| `bun run build` | Build the Astro site to `./out/` |
 | `bun run preview` | Preview production build locally |
 
 ## Environment
