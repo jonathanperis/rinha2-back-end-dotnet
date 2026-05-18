@@ -5,18 +5,28 @@ import path from 'node:path';
 interface Stat {
   value: string;
   label: string;
+  note: string;
 }
 
-const stats: Stat[] = [
-  { value: '47k+', label: 'Target Requests' },
-  { value: '< 1.5', label: 'CPU Cores Used' },
-  { value: '< 550', label: 'MB Memory Allocated' }
+const proofStats: Stat[] = [
+  { value: '46k+', label: 'requests / second', note: 'k6 stress run evidence' },
+  { value: '<50ms', label: 'p95 latency', note: 'under concurrent load' },
+  { value: '99.9%', label: 'success rate', note: 'archived CI reports' }
 ];
 
-const stressTestMetrics = [
-  { value: '46k+', label: 'Requests/Second' },
-  { value: '<50ms', label: 'P95 Latency' },
-  { value: '99.9%', label: 'Success Rate' }
+const constraints = [
+  ['API_INSTANCES', '2'],
+  ['LOAD_BALANCER', 'nginx x1'],
+  ['DATABASE', 'postgres x1'],
+  ['CPU_TOTAL', '<= 1.5 cores'],
+  ['MEMORY_TOTAL', '<= 550 MB']
+];
+
+const architectureNodes = [
+  { name: 'k6/load', meta: 'stress profile' },
+  { name: 'nginx', meta: 'least_conn' },
+  { name: 'api-1 / api-2', meta: '.NET 9 AOT' },
+  { name: 'postgres', meta: 'stored procedures' }
 ];
 
 const reportsDir = path.join(process.cwd(), 'public/reports');
@@ -35,67 +45,97 @@ function parseReportMeta(filename: string) {
   };
 }
 
-const recentReports = allReports.slice(0, 8).map(file => ({
+const recentReports = allReports.slice(0, 6).map(file => ({
   file,
   ...parseReportMeta(file),
 }));
 ---
 
-<section class="constraints">
-  <h2>System Constraints // Parameters</h2>
-  <ul class="constraint-list">
-    <li>2 API Instances</li>
-    <li>1 Nginx Load Balancer</li>
-    <li>1 Postgres Database</li>
-    <li>Max 1.5 CPU Total</li>
-    <li>Max 550MB RAM Total</li>
-  </ul>
+<section class="systems-section" aria-labelledby="system-title">
+  <div class="section-heading">
+    <p class="eyebrow">runtime budget</p>
+    <h2 id="system-title">System constraints as deployed parameters</h2>
+    <p>
+      The challenge is not raw hardware. It is throughput while two API instances,
+      one load balancer, and one database share a tiny resource envelope.
+    </p>
+  </div>
+
+  <div class="system-grid">
+    <article class="config-panel" aria-labelledby="constraints-title">
+      <div class="panel-topline">
+        <h3 id="constraints-title">constraints.config</h3>
+        <span>locked</span>
+      </div>
+      <dl class="config-list">
+        {constraints.map(([key, value]) => (
+          <div>
+            <dt>{key}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </article>
+
+    <article class="architecture-panel" aria-labelledby="architecture-title">
+      <div class="panel-topline">
+        <h3 id="architecture-title">request path</h3>
+        <span>topology</span>
+      </div>
+      <ol class="architecture-rail">
+        {architectureNodes.map((node) => (
+          <li>
+            <strong>{node.name}</strong>
+            <span>{node.meta}</span>
+          </li>
+        ))}
+      </ol>
+    </article>
+  </div>
 </section>
 
-<div class="stats-grid">
-  {stats.map(stat => (
-    <div class="stat-card">
-      <div class="stat-value">{stat.value}</div>
-      <div class="stat-label">{stat.label}</div>
-    </div>
-  ))}
-</div>
+<section class="proof-section" aria-labelledby="proof-title">
+  <div class="section-heading compact">
+    <p class="eyebrow">benchmark proof</p>
+    <h2 id="proof-title">Stress results, not decorative numbers</h2>
+  </div>
 
-<section class="stress-tests">
-  <h3>⚡ Stress Test Results</h3>
-  <p class="stress-intro">
-    Validated under extreme load conditions using k6. The system maintains stable performance
-    even when processing thousands of concurrent banking transactions.
-  </p>
-
-  <div class="stress-metrics">
-    {stressTestMetrics.map(metric => (
-      <div class="stress-metric">
-        <span class="metric-value">{metric.value}</span>
-        <span class="metric-label">{metric.label}</span>
-      </div>
+  <div class="proof-grid">
+    {proofStats.map(stat => (
+      <article class="proof-card">
+        <strong>{stat.value}</strong>
+        <span>{stat.label}</span>
+        <p>{stat.note}</p>
+      </article>
     ))}
   </div>
 
-  <div class="stress-links">
-    <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml" class="stress-link" target="_blank" rel="noopener noreferrer">
-      <span>📊</span> View CI/CD Stress Tests
+  <div class="proof-actions" aria-label="Evidence links">
+    <a href="https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml" class="evidence-link" target="_blank" rel="noopener noreferrer">
+      <span aria-hidden="true">▣</span> CI/CD stress tests
     </a>
-    <a href="./docs/" class="stress-link">
-      <span>📖</span> Documentation
+    <a href="./docs/performance/" class="evidence-link">
+      <span aria-hidden="true">↳</span> Performance notes
+    </a>
+    <a href="./reports/" class="evidence-link">
+      <span aria-hidden="true">≣</span> Report archive
     </a>
   </div>
 
-  <div class="reports-section">
-    <h4>📈 Historical Reports</h4>
-    <div class="reports-grid">
+  <article class="reports-log" aria-labelledby="reports-title">
+    <div class="panel-topline">
+      <h3 id="reports-title">latest archived runs</h3>
+      <a href="./reports/">View all {allReports.length}</a>
+    </div>
+    <div class="log-list">
       {recentReports.map(report => (
-        <a href={`./reports/${report.file}`} class="report-link">
-          <span class="report-date">{report.date}</span>
-          <span class="report-time">{report.time}</span>
+        <a href={`./reports/${report.file}`} class="log-row">
+          <span class="log-status">PASS</span>
+          <time>{report.date} {report.time}</time>
+          <span>k6 report</span>
+          <span aria-hidden="true">→</span>
         </a>
       ))}
     </div>
-    <p class="reports-note">{allReports.length} stress test runs archived • <a href="./reports/">View all reports →</a></p>
-  </div>
+  </article>
 </section>

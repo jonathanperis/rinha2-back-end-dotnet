@@ -10,16 +10,16 @@
 
 ## About
 
-A C#/.NET implementation of the Brazilian backend challenge Rinha de Backend 2024/Q1, where a fictional bank API must handle concurrent transactions under strict resource constraints (1.5 CPU, 550MB RAM total). This implementation uses ASP.NET Core 9 Minimal API with Native AOT compilation for zero-JIT startup, System.Text.Json source generators for reflection-free serialization, and Npgsql multiplexing for high-throughput database access. Achieved a Perfect Score badge with all requests under 800ms at 250MB RAM usage.
+A C#/.NET implementation of the Brazilian backend challenge Rinha de Backend 2024/Q1, where a fictional bank API must handle concurrent transactions under strict resource constraints (1.5 CPU, 550MB RAM total). This implementation targets `net9.0`, uses ASP.NET Core Minimal API with Native AOT compilation for zero-JIT startup, System.Text.Json source generators for reflection-free serialization, and Npgsql multiplexing for high-throughput database access. Current benchmark evidence is published in the GitHub Pages reports section rather than summarized as a fixed score in this README.
 
 ## Tech Stack
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| .NET / ASP.NET Core | 9.0 | Minimal API with Native AOT compilation |
+| .NET / ASP.NET Core | target `net9.0`; Docker build images `10.0` | Minimal API with Native AOT compilation |
 | Npgsql | 10.0.2 | PostgreSQL driver with connection pooling and multiplexing |
-| PostgreSQL | - | Database with stored procedures and tuned write settings |
-| Nginx | 1.27 | Reverse proxy and load balancer (least-conn) |
+| PostgreSQL | 16 in dev compose; default image in prod compose | Database with stored procedures and tuned write settings |
+| Nginx | default image in compose files | Reverse proxy and load balancer (least_conn) |
 | Docker | - | Multi-stage build and orchestration |
 | k6 | - | Stress testing |
 
@@ -60,16 +60,17 @@ API available at `http://localhost:9999`
 rinha2-back-end-dotnet/
 ├── src/WebApi/
 │   ├── Program.cs            — Complete API (route handlers, DI, config)
-│   ├── WebApi.csproj         — Project config (AOT, Trim, ExtraOptimize flags)
-│   └── Dockerfile            — Multi-stage build
+│   ├── WebApi.csproj         — Project config (net9.0, AOT, Trim, ExtraOptimize flags)
+│   ├── Dockerfile            — Multi-stage Docker build using .NET 10 SDK/runtime images
+│   └── appsettings.json      — OpenTelemetry defaults used when ExtraOptimize=false
 ├── docker-entrypoint-initdb.d/
 │   └── rinha.dump.sql        — Schema, stored procedures, seed data
 ├── docker-compose.yml        — Dev stack: API x2, Nginx, PostgreSQL, observability
 ├── prod/docker-compose.yml   — Prod stack with GHCR images
 ├── nginx.conf                — Load balancer (least_conn)
-├── grafana/                  — Pre-configured dashboards
-├── wiki/                     — GitHub Wiki (submodule)
-├── docs/                     — GitHub Pages site + k6 reports
+├── grafana/                  — Legacy Grafana dashboard provisioning
+├── docs/wiki/                — Markdown source for the documentation/wiki pages
+├── docs/                     — Astro GitHub Pages site + published k6 reports
 └── .github/workflows/        — CI/CD pipelines
 ```
 
@@ -77,10 +78,10 @@ rinha2-back-end-dotnet/
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
-| Build Check | PRs to main | Build + Docker health check |
-| Main Release | Push to main | Multi-platform Docker push to GHCR + k6 load test |
-| CodeQL | PRs + weekly | Security analysis |
-| Deploy Docs | Push to main + wiki changes | Generate docs site from wiki |
+| Build Check | PRs to main, manual dispatch | WebApi restore/build + Docker Compose health check |
+| Main Release | Push to main, manual dispatch | Multi-platform Docker push to GHCR + production compose/k6 validation |
+| CodeQL | PRs, pushes to main, weekly | Security analysis |
+| Deploy Docs | Push to main, manual dispatch | Build the Astro docs site from `docs/` and deploy to Pages |
 
 Docker image: `ghcr.io/jonathanperis/rinha2-back-end-dotnet:latest`
 

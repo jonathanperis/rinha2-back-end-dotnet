@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import '../../styles/docs.css';
-import { SECTION_CATEGORIES, SECTION_ORDER } from './sidebar.config';
+import { SECTION_CATEGORIES, SECTION_ORDER } from '../../sidebar.config';
 
 const SLUG_LABEL: Record<string, string> = {
   home: 'Home',
@@ -10,6 +10,15 @@ const SLUG_LABEL: Record<string, string> = {
   'ci-cd-pipeline': 'CI/CD Pipeline',
   'getting-started': 'Getting Started',
   performance: 'Performance',
+};
+
+const SECTION_SUMMARIES: Record<string, { eyebrow: string; description: string; signal: string }> = {
+  home: { eyebrow: 'Index', description: 'Operator overview, proof points, and shortest path into the repo.', signal: 'start here' },
+  challenge: { eyebrow: 'Spec', description: 'Rules, endpoints, validation behavior, and resource envelope.', signal: '1.5 CPU / 550MB' },
+  architecture: { eyebrow: 'Runtime', description: 'NGINX, two Native AOT API containers, PostgreSQL stored procedures, and telemetry.', signal: 'API x2 + PostgreSQL' },
+  'getting-started': { eyebrow: 'Runbook', description: 'Clone, boot the compose stack, smoke `/healthz`, and issue sample requests.', signal: 'copy-ready' },
+  performance: { eyebrow: 'Evidence', description: 'Budget split, latency choices, k6 lane, and release validation links.', signal: 'AOT + k6' },
+  'ci-cd-pipeline': { eyebrow: 'Release', description: 'PR gates, GHCR publishing, CodeQL, and Pages deploy workflow.', signal: 'linear main' },
 };
 
 const globResult = import.meta.glob('../../../wiki/*.md', { eager: true });
@@ -58,6 +67,9 @@ const pageTitle = isRoot ? 'rinha2-back-end-dotnet - Documentation' : `${SLUG_LA
 const base = import.meta.env.BASE_URL;
 const docsBase = base.replace(/\/$/, '') + '/docs';
 const backHomeUrl = base.replace(/\/$/, '') + '/';
+const currentSlug = isRoot ? 'home' : requestedKey;
+const docsHomeUrl = `${docsBase}/`;
+const sectionCards = SECTION_ORDER.map(id => ({ id, label: SLUG_LABEL[id], ...SECTION_SUMMARIES[id] }));
 ---
 
 <BaseLayout title={pageTitle}>
@@ -76,10 +88,12 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
     <div class="sidebar-header">
       <h1 class="repo-title">rinha2-back-end-dotnet</h1>
       <p class="repo-description">
-        .NET 9 Native AOT implementation of Rinha de Backend 2024/Q1 — fictional bank API
-        for performance under constraints
+        .NET 9 Native AOT implementation of Rinha de Backend 2024/Q1, a fictional bank API
+        tuned for performance under strict constraints
       </p>
-      <input type="text" id="searchInput" class="search-box" placeholder="Search documentation..." aria-label="Search documentation" hidden={!isRoot}>
+      <label class="search-label" for="searchInput" hidden={!isRoot}>Command search</label>
+      <input type="search" id="searchInput" class="search-box" placeholder="Search docs by keyword..." aria-label="Search documentation" autocomplete="off" hidden={!isRoot}>
+      <div class="search-hint" hidden={!isRoot}>Press <kbd>/</kbd> to focus · <span id="searchCount">all sections</span></div>
     </div>
     <div class="sidebar-nav-container">
       {SECTION_CATEGORIES.map((cat) => {
@@ -90,8 +104,14 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
             <ul>
               {catIds.map((id) => (
                 <li>
-                  <a class="nav-item" href={`${docsBase}/#${id}`} data-nav-id={id}>
-                    {SLUG_LABEL[id]}
+                  <a
+                    class="nav-item"
+                    href={id === 'home' ? docsHomeUrl : `${docsBase}/${id}/`}
+                    data-nav-id={id}
+                    aria-current={currentSlug === id ? 'page' : undefined}
+                  >
+                    <span>{SLUG_LABEL[id]}</span>
+                    {SECTION_SUMMARIES[id]?.signal && <small>{SECTION_SUMMARIES[id].signal}</small>}
                   </a>
                 </li>
               ))}
@@ -109,6 +129,30 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
 
   <div class="content-wrapper">
     <main class="content" id="mainContent">
+      {isRoot && (
+        <section class="docs-overview" aria-labelledby="docs-overview-title">
+          <div class="overview-copy">
+            <p class="eyebrow">Documentation control surface</p>
+            <h1 id="docs-overview-title">From contest rules to deploy evidence, without leaving the docs.</h1>
+            <p>Use this page as the operator map, then open focused pages when you need implementation detail, commands, or release proof.</p>
+          </div>
+          <div class="proof-console" aria-label="Runtime proof summary">
+            <div><span>budget</span><strong>1.5 CPU / 550MB</strong></div>
+            <div><span>runtime</span><strong>.NET 9 Native AOT</strong></div>
+            <div><span>entrypoint</span><strong>NGINX :9999</strong></div>
+            <div><span>release</span><strong>GHCR + Pages</strong></div>
+          </div>
+          <div class="section-card-grid">
+            {sectionCards.filter(card => card.id !== 'home').map(card => (
+              <a class="section-card" href={`${docsBase}/${card.id}/`}>
+                <span>{card.eyebrow}</span>
+                <strong>{card.label}</strong>
+                <p>{card.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
       {sectionsToRender.map(({ slug, page: wikiPage }) => {
         const Content = wikiPage.default ?? wikiPage;
         return (
@@ -118,6 +162,12 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
         );
       })}
     </main>
+    <aside class="local-toc" aria-labelledby="toc-title">
+      <div class="local-toc-inner">
+        <h2 id="toc-title">On this page</h2>
+        <nav id="localTocNav" aria-label="On this page"></nav>
+      </div>
+    </aside>
   </div>
 
   {requestedSlug && <script is:inline define:vars={{ slug: requestedSlug, isRoot: isRoot }}>window.__docsSlug = slug; window.__isRoot = isRoot;</script>}
@@ -127,111 +177,173 @@ const backHomeUrl = base.replace(/\/$/, '') + '/';
       const menuToggle = document.getElementById('menuToggle');
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
+      const isRoot = window.__isRoot !== false;
+      const motionQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
+      const scrollBehavior = () => motionQuery.matches ? 'smooth' : 'auto';
+      const sections = Array.from(document.querySelectorAll('section.doc-section'));
+      const navItems = Array.from(document.querySelectorAll('.nav-item'));
+
+      function setMenu(open) {
+        if (!sidebar || !overlay) return;
+        sidebar.classList.toggle('open', open);
+        overlay.classList.toggle('open', open);
+        document.body.classList.toggle('menu-open', open);
+        if (menuToggle) menuToggle.setAttribute('aria-expanded', String(open));
+        if (open) {
+          const firstLink = sidebar.querySelector('a, button, input');
+          if (firstLink) firstLink.focus({ preventScroll: true });
+        } else if (menuToggle && window.innerWidth <= 768) {
+          menuToggle.focus({ preventScroll: true });
+        }
+      }
 
       function toggleMenu() {
-        const isOpen = sidebar.classList.toggle('open');
-        overlay.classList.toggle('open');
-        if (menuToggle) menuToggle.setAttribute('aria-expanded', String(isOpen));
+        const isOpen = sidebar?.classList.contains('open') ?? false;
+        setMenu(!isOpen);
       }
 
       if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
-      if (overlay) overlay.addEventListener('click', toggleMenu);
+      if (overlay) overlay.addEventListener('click', () => setMenu(false));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && sidebar?.classList.contains('open')) setMenu(false);
+      });
 
-      const isRoot = window.__isRoot !== false;
-      const prefersReducedMotion = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-      const sections = document.querySelectorAll('section.doc-section');
-      const navItems = document.querySelectorAll('.nav-item');
-
-      // Auto-scroll: root uses section slug; single-section lets browser handle deep-link hashes
       if (isRoot) {
         const targetSlug = window.__docsSlug;
         const hash = window.location.hash;
         const sectionId = targetSlug || (hash && hash.length > 1 ? hash.slice(1) : null);
         if (sectionId) {
           const target = document.getElementById(sectionId);
-          if (target) {
-            setTimeout(() => target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' }), 100);
-          }
+          if (target) setTimeout(() => target.scrollIntoView({ behavior: scrollBehavior(), block: 'start' }), 100);
         }
       }
 
-      // Scrollspy + nav click: only meaningful with multiple sections
-      if (isRoot && sections.length > 1) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const sectionId = entry.target.id;
-              navItems.forEach(item => {
-                item.classList.toggle('active', item.dataset.navId === sectionId);
-                if (item.dataset.navId === sectionId) {
-                  item.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'nearest' });
-                }
-              });
-            }
-          });
-        }, { root: null, rootMargin: '-80px 0px -60% 0px', threshold: 0 });
-
-        sections.forEach(section => observer.observe(section));
-
-        navItems.forEach(item => {
-          item.addEventListener('click', () => {
-            if (window.innerWidth <= 768) toggleMenu();
-          });
+      // Build a local heading table of contents from rendered Markdown.
+      const localTocNav = document.getElementById('localTocNav');
+      const headingNodes = Array.from(document.querySelectorAll('.content h1, .content h2, .content h3'))
+        .filter(h => h.id && h.textContent?.trim() && h.id !== 'docs-overview-title');
+      if (localTocNav && headingNodes.length > 0) {
+        const list = document.createElement('ol');
+        headingNodes.forEach(heading => {
+          const item = document.createElement('li');
+          item.className = heading.tagName === 'H1' ? 'toc-major' : heading.tagName === 'H3' ? 'toc-nested' : '';
+          const link = document.createElement('a');
+          link.href = `#${heading.id}`;
+          link.textContent = heading.textContent.trim();
+          link.dataset.tocId = heading.id;
+          item.appendChild(link);
+          list.appendChild(item);
         });
+        localTocNav.appendChild(list);
+      } else {
+        document.querySelector('.local-toc')?.setAttribute('hidden', '');
       }
 
-      // Search: only on root (full tree); single-section has nothing to filter
+      // Add copy affordances and language labels to code blocks after Shiki renders.
+      document.querySelectorAll('pre').forEach((pre, index) => {
+        if (pre.parentElement?.classList.contains('code-shell')) return;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-shell';
+        const label = document.createElement('span');
+        label.className = 'code-language';
+        const className = Array.from(pre.classList).find(cls => cls.startsWith('language-'));
+        label.textContent = className ? className.replace('language-', '') : 'code';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'copy-code';
+        button.textContent = 'Copy';
+        button.setAttribute('aria-label', `Copy code block ${index + 1}`);
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.append(label, button, pre);
+        button.addEventListener('click', async () => {
+          const code = pre.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = 'Copied';
+            button.classList.add('copied');
+            setTimeout(() => { button.textContent = 'Copy'; button.classList.remove('copied'); }, 1400);
+          } catch {
+            button.textContent = 'Failed';
+            setTimeout(() => { button.textContent = 'Copy'; }, 1400);
+          }
+        });
+      });
+
+      // Scrollspy for section navigation and local TOC.
+      const tocLinks = Array.from(document.querySelectorAll('[data-toc-id]'));
+      const observedTargets = [...sections, ...headingNodes];
+      if (observedTargets.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            if (entry.target.classList.contains('doc-section')) {
+              navItems.forEach(item => {
+                const active = item.dataset.navId === id;
+                item.classList.toggle('active', active);
+                if (active) item.setAttribute('aria-current', 'true');
+                else item.removeAttribute('aria-current');
+              });
+            } else {
+              tocLinks.forEach(link => {
+                const active = link.dataset.tocId === id;
+                link.classList.toggle('active', active);
+                if (active) link.setAttribute('aria-current', 'true');
+                else link.removeAttribute('aria-current');
+              });
+            }
+          });
+        }, { root: null, rootMargin: '-96px 0px -68% 0px', threshold: 0 });
+        observedTargets.forEach(target => observer.observe(target));
+      }
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 768) setMenu(false);
+        });
+      });
+
+      // Command-palette style filter on the all-docs root.
       if (isRoot) {
         const searchInput = document.getElementById('searchInput');
+        const searchCount = document.getElementById('searchCount');
+        const categoryGroups = Array.from(document.querySelectorAll('.sidebar-category-group'));
+
+        const updateSearch = () => {
+          const query = (searchInput?.value ?? '').trim().toLowerCase();
+          let visibleSections = 0;
+
+          sections.forEach(section => {
+            const text = section.textContent?.toLowerCase() ?? '';
+            const visible = query === '' || text.includes(query) || section.id.includes(query);
+            section.classList.toggle('hidden-section', !visible);
+            const navItem = document.querySelector(`.nav-item[data-nav-id="${section.id}"]`);
+            if (navItem?.parentElement) navItem.parentElement.hidden = !visible;
+            if (visible) visibleSections++;
+          });
+
+          categoryGroups.forEach(group => {
+            const visibleItems = Array.from(group.querySelectorAll('li')).filter(li => !li.hidden).length;
+            group.hidden = visibleItems === 0;
+          });
+
+          if (searchCount) {
+            searchCount.textContent = query === ''
+              ? 'all sections'
+              : `${visibleSections} match${visibleSections === 1 ? '' : 'es'}`;
+          }
+        };
+
         if (searchInput) {
-          searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const content = document.getElementById('mainContent');
-            if (!content) return;
-
-            if (query === '') {
-              sections.forEach(s => s.classList.remove('hidden-section'));
-              navItems.forEach(item => {
-                item.style.display = '';
-                item.parentElement.style.display = '';
-              });
-              document.querySelectorAll('.sidebar-category-group').forEach(group => {
-                group.style.display = '';
-                const catLabel = group.querySelector('.sidebar-category');
-                if (catLabel) catLabel.style.display = '';
-              });
-              return;
+          searchInput.addEventListener('input', updateSearch);
+          document.addEventListener('keydown', (event) => {
+            const target = event.target;
+            const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+            if (event.key === '/' && !isTyping) {
+              event.preventDefault();
+              searchInput.focus();
+              searchInput.select();
             }
-
-            sections.forEach(section => {
-              const text = section.textContent?.toLowerCase() ?? '';
-              const navItem = document.querySelector(`.nav-item[data-nav-id="${section.id}"]`);
-              const li = navItem ? navItem.parentElement : null;
-
-              if (text.includes(query)) {
-                section.classList.remove('hidden-section');
-                if (li) li.style.display = '';
-              } else {
-                section.classList.add('hidden-section');
-                if (li) li.style.display = 'none';
-              }
-            });
-
-            // Hide empty categories
-            document.querySelectorAll('.sidebar-category-group').forEach(group => {
-              const items = group.querySelectorAll('.nav-item');
-              let visibleCount = 0;
-              items.forEach(item => {
-                const id = item.dataset.navId;
-                const sec = document.getElementById(id ?? '');
-                const vis = !sec || !sec.classList.contains('hidden-section');
-                item.style.display = vis ? '' : 'none';
-                if (vis) visibleCount++;
-              });
-              const catLabel = group.querySelector('.sidebar-category');
-              if (catLabel) catLabel.style.display = visibleCount === 0 ? 'none' : '';
-              group.style.display = visibleCount === 0 ? 'none' : '';
-            });
           });
         }
       }
