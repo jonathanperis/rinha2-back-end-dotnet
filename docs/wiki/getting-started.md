@@ -38,7 +38,7 @@ A healthy stack returns `HTTP/1.1 200 OK`.
 
 ## Example transaction
 
-Credits use `tipo: "c"`, debits use `tipo: "d"`. Values are integer cents.
+Credits use `tipo: "c"`, debits use `tipo: "d"`. Values are positive integer cents.
 
 ```bash
 curl -X POST http://localhost:9999/clientes/1/transacoes \
@@ -46,11 +46,44 @@ curl -X POST http://localhost:9999/clientes/1/transacoes \
   -d '{"valor": 1000, "tipo": "c", "descricao": "deposito"}'
 ```
 
+The successful response returns the client ID, limit, and updated balance:
+
+```json
+{
+  "id": 1,
+  "limite": 100000,
+  "saldo": 1000
+}
+```
+
+Invalid payloads return `422`. Unknown client IDs return `404`.
+
 ## Example statement
 
 ```bash
 curl http://localhost:9999/clientes/1/extrato
 ```
+
+Example response:
+
+```json
+{
+  "saldo": {
+    "total": 1000,
+    "limite": 100000,
+    "data_extrato": "2026-04-01T19:20:20.000000"
+  },
+  "ultimas_transacoes": [
+    {
+      "valor": 1000,
+      "tipo": "c",
+      "descricao": "deposito"
+    }
+  ]
+}
+```
+
+For the full endpoint contract and the current over-limit debit behavior, see [API Reference](https://jonathanperis.github.io/rinha2-back-end-dotnet/docs/api-reference/).
 
 ## Run the load-test lane
 

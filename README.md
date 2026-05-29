@@ -4,7 +4,7 @@
 
 [![Build Check](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/build-check.yml) [![Main Release](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/main-release.yml) [![CodeQL](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/codeql.yml/badge.svg)](https://github.com/jonathanperis/rinha2-back-end-dotnet/actions/workflows/codeql.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**[Live demo →](https://jonathanperis.github.io/rinha2-back-end-dotnet/)** | **[Documentation →](https://github.com/jonathanperis/rinha2-back-end-dotnet/wiki)**
+**[Live demo →](https://jonathanperis.github.io/rinha2-back-end-dotnet/)** | **[Documentation →](https://jonathanperis.github.io/rinha2-back-end-dotnet/docs/)**
 
 ---
 
@@ -54,6 +54,8 @@ API available at `http://localhost:9999`
 | `/clientes/{id}/extrato` | GET | Get account balance statement |
 | `/healthz` | GET | Health check |
 
+For request/response payloads, validation behavior, and known implementation notes, see the [API Reference](https://jonathanperis.github.io/rinha2-back-end-dotnet/docs/api-reference/).
+
 ## Project Structure
 
 ```
@@ -69,8 +71,8 @@ rinha2-back-end-dotnet/
 ├── prod/docker-compose.yml   — Prod stack with GHCR images
 ├── nginx.conf                — Load balancer (least_conn)
 ├── grafana/                  — Legacy Grafana dashboard provisioning
-├── docs/wiki/                — Markdown source for the documentation/wiki pages
-├── docs/                     — Astro GitHub Pages site + published k6 reports
+├── docs/wiki/                — Markdown source rendered to the Pages docs routes
+├── docs/                     — Astro 6.4 GitHub Pages site using Sätteri + published k6 reports
 └── .github/workflows/        — CI/CD pipelines
 ```
 

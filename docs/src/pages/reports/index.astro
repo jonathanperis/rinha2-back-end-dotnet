@@ -37,7 +37,8 @@ function parseReportMeta(filename: string) {
         <main class="reports-main">
             <header class="reports-header">
                 <h1>Stress Test Reports</h1>
-                <p>{reports.length} runs archived — k6 load tests executed on every push to <code>main</code></p>
+                <p>{reports.length} runs archived — k6 load-test HTML reports preserved from release validation runs and benchmark experiments.</p>
+                <p class="reports-note">Each file is an immutable report artifact. Use the docs performance page for methodology and only update homepage benchmark numbers when they can be traced to a specific archived report.</p>
             </header>
 
             <div class="reports-list">
@@ -99,6 +100,12 @@ function parseReportMeta(filename: string) {
     .reports-header p {
         color: var(--text-muted);
         font-size: 0.9rem;
+    }
+
+    .reports-note {
+        margin-top: 0.75rem;
+        max-width: 720px;
+        line-height: 1.6;
     }
 
     .reports-header code {

@@ -45,9 +45,23 @@ After a PR is rebased into `main`, the release workflow publishes the runtime im
 | Docs site | `https://jonathanperis.github.io/rinha2-back-end-dotnet/` |
 | Docs section | `https://jonathanperis.github.io/rinha2-back-end-dotnet/docs/` |
 
+## Build/version matrix
+
+| Path | SDK/runtime | Flags | Purpose |
+|------|-------------|-------|---------|
+| Local Docker/dev compose | .NET `10.0` SDK/runtime images from `src/WebApi/Dockerfile` | `AOT=true`, `TRIM=false`, `EXTRA_OPTIMIZE=false` | Local stack with OpenTelemetry support |
+| PR Build Check | `actions/setup-dotnet` `9.0.x` | `AOT=true`, `TRIM=false`, `EXTRA_OPTIMIZE=true` | Fast compile gate plus compose health check |
+| Main Release image | .NET `10.0` Docker build/runtime images | `AOT=true`, `TRIM=false`, `EXTRA_OPTIMIZE=true` | GHCR release image and multi-arch manifest |
+| CodeQL | `actions/setup-dotnet` `9.0.x` | Plain Release build | Security analysis |
+| Docs deploy | Bun + Astro `^6.4.2` | `NODE_ENV=production` base path | GitHub Pages static site |
+
+The project targets `net9.0` even when Docker build images are `10.0`.
+
 ## Documentation deploy
 
-The Pages workflow delegates to Jonathan's shared GitHub Pages workflow and uses Bun as the package manager. The docs package is an Astro static site under `docs/`; Markdown content lives in `docs/wiki/`, and production routes are served under the `/rinha2-back-end-dotnet` base path.
+The Pages workflow delegates to Jonathan's shared GitHub Pages workflow and uses Bun as the package manager. The docs package is an Astro 6.4 static site under `docs/`; Markdown content lives in `docs/wiki/`, and production routes are served under the `/rinha2-back-end-dotnet` base path.
+
+The docs site uses Astro's `markdown.processor` API with `@astrojs/markdown-satteri`. That keeps Markdown rendering explicit, but it also means future Remark/Rehype-style extensions should be tested against Sätteri before they are assumed to work.
 
 ## Operational notes
 

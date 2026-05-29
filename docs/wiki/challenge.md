@@ -8,7 +8,7 @@ Rinha de Backend is a Brazilian backend challenge focused on constrained, concur
 
 | Endpoint | Method | Purpose | Expected statuses |
 |----------|--------|---------|-------------------|
-| `/clientes/{id}/transacoes` | POST | Submit a debit (`d`) or credit (`c`) transaction for client IDs 1 through 5 | `200`, `404`, `422` |
+| `/clientes/{id}/transacoes` | POST | Submit a debit (`d`) or credit (`c`) transaction for client IDs 1 through 5 | `200`, `404`, `422` for invalid payloads |
 | `/clientes/{id}/extrato` | GET | Return balance, credit limit, statement time, and recent transactions | `200`, `404` |
 | `/healthz` | GET | Local and CI health check for this implementation | `200` |
 
@@ -16,9 +16,10 @@ Rinha de Backend is a Brazilian backend challenge focused on constrained, concur
 
 - Only client IDs `1` through `5` exist.
 - Transaction type must be debit (`d`) or credit (`c`).
-- Transaction value must be an integer amount.
-- Description must be present and at most 10 characters, matching the current API validation and database function signature.
-- Debits cannot push the account beyond the configured credit limit.
+- Transaction value must be a positive integer amount in cents (`valor > 0`).
+- Description must be present, non-empty, and at most 10 characters.
+- Transaction type must be checked by the API before the request reaches PostgreSQL.
+- Debits are intended not to push the account beyond the configured credit limit.
 - Statement responses return the current balance plus the latest 10 transactions.
 
 ## Resource envelope
@@ -42,3 +43,13 @@ The k6 runner and observability containers are test infrastructure. They are use
 ## Source
 
 Full specification: [github.com/zanfranceschi/rinha-de-backend-2024-q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)
+
+
+## Current implementation compatibility note
+
+Payload validation is split across the API and PostgreSQL:
+
+- `Program.cs` rejects invalid client IDs, non-positive values, invalid transaction types, and missing/empty/long descriptions before calling the database.
+- `InsertTransacao` in `docker-entrypoint-initdb.d/rinha.dump.sql` performs the atomic balance update and transaction insert.
+
+One important edge case is worth calling out: when a debit would exceed the account limit, the current SQL function returns the existing balance without inserting a transaction. Because the route handler treats the returned balance as a successful result, this case can surface as `200 OK` with an unchanged balance rather than the strict Rinha `422` behavior. Treat this as a known implementation note until the SQL/API contract is changed.
