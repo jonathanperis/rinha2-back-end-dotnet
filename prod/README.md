@@ -7,7 +7,7 @@ Production submission assets for Jonathan Peris' .NET implementation.
 - C# / ASP.NET Core Minimal API targeting `net9.0`
 - Native AOT release image built from `src/WebApi/Dockerfile`
 - Npgsql 10.0.2 with `Multiplexing=true`
-- PostgreSQL with stored procedures for atomic transaction rules
+- PostgreSQL with stored procedures for atomic transaction rules (`prod/docker-compose.yml` currently uses the default `postgres` image tag; pin it if reproducible engine version is required)
 - NGINX on port `9999` using `least_conn`
 - k6 runner image for production-mode HTML report generation
 

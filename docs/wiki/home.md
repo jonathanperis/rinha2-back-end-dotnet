@@ -9,6 +9,7 @@ Operator documentation for a C#/.NET 9 Native AOT implementation of Rinha de Bac
 | Understand the contest rules | [Challenge](challenge) | Endpoints, validation rules, and scoring constraints |
 | See the runtime topology | [Architecture](architecture) | Service map, CPU/RAM split, database strategy |
 | Run the stack locally | [Getting Started](getting-started) | Compose commands, smoke checks, sample requests |
+| Check endpoint contracts | [API Reference](api-reference) | Payloads, responses, status codes, and implementation notes |
 | Review benchmark evidence | [Performance](performance) | Resource margins, test shape, and report links |
 | Follow releases and deploys | [CI/CD Pipeline](ci-cd-pipeline) | PR gates, image publishing, Pages deploy flow |
 

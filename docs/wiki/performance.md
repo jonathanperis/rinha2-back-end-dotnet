@@ -27,6 +27,17 @@ The challenge allows 1.5 CPU and 550MB RAM across the counted runtime containers
 
 Load tests run through the shared [rinha2-back-end-k6](https://github.com/jonathanperis/rinha2-back-end-k6) test suite. The runner drives transaction and statement requests through NGINX, so the measured path includes load balancing, both API containers, and PostgreSQL.
 
+The homepage benchmark cards are intentionally treated as archived-run claims, not timeless guarantees. When updating numbers like `46k+ requests/second`, `<50ms p95 latency`, or `99.9% success rate`, tie the change to a concrete archived report and keep the report file in `docs/public/reports/`.
+
+| Claim on homepage | What to verify before changing it |
+|-------------------|-----------------------------------|
+| Requests/second | The k6 report's request-throughput metric for the selected run |
+| p95 latency | The report's p95 request-duration metric for the same run |
+| Success rate | Failed request/check rate for the same run |
+| PASS report link | The corresponding `stress-test-report-YYYYMMDDHHMMSS.html` file is present in the Pages report archive |
+
+CI runners and local machines can vary. Prefer wording such as "archived run" or "representative run" unless the number comes from a repeatable benchmark protocol documented here.
+
 ```bash
 docker compose up nginx -d --build
 docker compose up k6
@@ -53,6 +64,10 @@ The `Main Release` workflow validates more than a build:
 4. Runs the load-test job and uploads the HTML stress-test report artifact.
 5. Builds and pushes the arm64 image.
 6. Merges the platform images into the `latest` manifest.
+
+## Report archive workflow
+
+The release workflow uploads the HTML stress-test report as a GitHub Actions artifact. Reports that should be published on Pages are committed under `docs/public/reports/`; the Astro reports page indexes every `.html` file in that directory at build time. The reports index is an archive, not a parser, so summary metrics must be copied into docs/homepage copy deliberately.
 
 ## Evidence links
 

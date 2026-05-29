@@ -42,11 +42,11 @@ The API project targets `net9.0`; its Dockerfile currently builds and runs it wi
 
 ## Database boundary
 
-PostgreSQL owns the race-sensitive work. The API calls stored procedures for balance reads and transaction inserts instead of doing multi-step application-side coordination.
+PostgreSQL owns the race-sensitive work. The API calls stored procedures for balance reads and transaction inserts instead of doing multi-step application-side coordination. Payload-shape validation remains API-side; the stored procedure should be read as the atomic consistency boundary, not as the only validation layer.
 
 | Procedure | Responsibility |
 |-----------|----------------|
-| `InsertTransacao` | Validate client, type, value, description, and credit limit, then insert atomically |
+| `InsertTransacao` | Check client existence, apply the atomic balance update, enforce the database-side credit-limit guard, and insert the transaction row when the update succeeds |
 | `GetSaldoClienteById` | Return balance metadata and recent transactions as JSONB |
 
 The compose command also tunes write durability for the contest setting:
@@ -77,3 +77,17 @@ That shape keeps database concurrency explicit, avoids unbounded connection grow
 | `TRIM` | `false` | Leaves trimming separate from AOT path |
 | `EXTRA_OPTIMIZE` | `true` | Removes observability/runtime support guarded by `EXTRAOPTIMIZE` |
 | `BUILD_CONFIGURATION` | `Release` | Uses optimized .NET build configuration |
+
+
+## API and database contract
+
+| Rule | Enforced by | Source |
+|------|-------------|--------|
+| Client ID is one of `1..5` | API fast path and database existence check | `Program.cs`, `InsertTransacao` |
+| `valor` is positive | API | `IsTransacaoValid` |
+| `tipo` is exactly `c` or `d` | API | `IsTransacaoValid` |
+| `descricao` is present and <= 10 chars | API, with SQL parameter width as a backstop | `IsTransacaoValid`, `InsertTransacao(... descricao VARCHAR(10))` |
+| Balance update and transaction insert stay atomic | PostgreSQL | `InsertTransacao` |
+| Statement returns newest 10 transactions | PostgreSQL | `GetSaldoClienteById` |
+
+The NGINX config currently uses `least_conn`. If this repository is used as a strict official challenge submission, keep the config comments and docs aligned with whatever balancing policy is allowed by the target ruleset.

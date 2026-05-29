@@ -9,6 +9,7 @@ const SLUG_LABEL: Record<string, string> = {
   challenge: 'Challenge',
   'ci-cd-pipeline': 'CI/CD Pipeline',
   'getting-started': 'Getting Started',
+  'api-reference': 'API Reference',
   performance: 'Performance',
 };
 
@@ -17,6 +18,7 @@ const SECTION_SUMMARIES: Record<string, { eyebrow: string; description: string; 
   challenge: { eyebrow: 'Spec', description: 'Rules, endpoints, validation behavior, and resource envelope.', signal: '1.5 CPU / 550MB' },
   architecture: { eyebrow: 'Runtime', description: 'NGINX, two Native AOT API containers, PostgreSQL stored procedures, and telemetry.', signal: 'API x2 + PostgreSQL' },
   'getting-started': { eyebrow: 'Runbook', description: 'Clone, boot the compose stack, smoke `/healthz`, and issue sample requests.', signal: 'copy-ready' },
+  'api-reference': { eyebrow: 'Contract', description: 'Endpoint payloads, response shapes, validation rules, and current implementation notes.', signal: 'HTTP 200 / 404 / 422' },
   performance: { eyebrow: 'Evidence', description: 'Budget split, latency choices, k6 lane, and release validation links.', signal: 'AOT + k6' },
   'ci-cd-pipeline': { eyebrow: 'Release', description: 'PR gates, GHCR publishing, CodeQL, and Pages deploy workflow.', signal: 'linear main' },
 };
