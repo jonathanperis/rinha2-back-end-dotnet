@@ -10,8 +10,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.2.1",
     "@astrojs/sitemap": "^3",
-    "astro": "^6"
+    "astro": "^6.4.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
