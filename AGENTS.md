@@ -43,13 +43,15 @@ docker compose up nginx -d --build
 docker compose up k6
 ```
 
-Docs site validation runs from `docs/`:
+Docs site validation runs from `docs/`. Astro 7 requires Node `>=22.12.0` in the shell that invokes Bun/Astro:
 
 ```sh
 bun install --frozen-lockfile
-bun run build
+NODE_ENV=production bun run build
 bun run lint
 ```
+
+For browser/agent smoke tests, use the managed Astro 7 dev-server lifecycle scripts: `bun run dev:background`, `bun run dev:status`, `bun run dev:logs`, and `bun run dev:stop`.
 
 ### Build Arguments
 

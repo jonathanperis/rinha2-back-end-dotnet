@@ -72,7 +72,7 @@ rinha2-back-end-dotnet/
 ├── nginx.conf                — Load balancer (least_conn)
 ├── grafana/                  — Legacy Grafana dashboard provisioning
 ├── docs/wiki/                — Markdown source rendered to the Pages docs routes
-├── docs/                     — Astro 6.4 GitHub Pages site using Sätteri + published k6 reports
+├── docs/                     — Astro 7 GitHub Pages site using Sätteri + published k6 reports
 └── .github/workflows/        — CI/CD pipelines
 ```
 
