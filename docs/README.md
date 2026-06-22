@@ -6,8 +6,8 @@ Astro static site deployed to GitHub Pages. The Markdown pages under `docs/wiki/
 
 | Area | Source of truth |
 |---|---|
-| Site framework | Astro `^6.4.2` |
-| Markdown renderer | Astro 6.4 `markdown.processor` using `@astrojs/markdown-satteri` |
+| Site framework | Astro `^7.0.0` |
+| Markdown renderer | Astro 7 `markdown.processor` using `@astrojs/markdown-satteri` `^0.3.1` |
 | Markdown content | `docs/wiki/*.md` |
 | Docs route renderer | `docs/src/pages/docs/[...slug].astro` |
 | Sidebar/category order | `docs/src/sidebar.config.ts` |
@@ -34,11 +34,15 @@ Run from this directory (`docs/`):
 |---|---|
 | `bun install` | Install dependencies |
 | `bun run dev` | Start dev server |
+| `bun run dev:background` | Start Astro's managed background dev server for agent/browser smoke tests |
+| `bun run dev:status` | Check the managed background dev server status |
+| `bun run dev:logs` | Print the managed background dev server logs |
+| `bun run dev:stop` | Stop the managed background dev server |
 | `NODE_ENV=production bun run build` | Build the GitHub Pages-shaped site to `./out/` with the repository base path |
 | `bun run preview` | Preview the production build locally |
 | `bun run lint` | Run ESLint |
 
-Use Bun for this package so `bun.lock` stays authoritative.
+Use Bun for this package so `bun.lock` stays authoritative. Astro 7 requires Node `>=22.12.0`; local and CI shells that run `astro build` must expose a compatible Node runtime before invoking Bun.
 
 ## Markdown processor notes
 
@@ -55,6 +59,10 @@ export default defineConfig({
 ```
 
 Do not assume arbitrary Remark/Rehype plugin behavior unless it has been tested with Sätteri. If a future docs feature needs Markdown plugins, validate the build and the rendered Pages output before merging.
+
+## Astro 7 feature fit
+
+The upgrade adopts the static-site wins from Astro 7: the Rust `.astro` compiler, Vite 8/Rolldown bundling path, queued rendering, the Astro-7-compatible Sätteri Markdown processor, and managed background dev-server commands. The site remains `output: 'static'` on GitHub Pages, so SSR/request-pipeline features such as route caching, CDN cache providers, and `src/fetch.ts` advanced routing are intentionally not configured here.
 
 ## Environment
 
